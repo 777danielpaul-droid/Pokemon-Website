@@ -1,4 +1,4 @@
-# ⚡ Rondelldemo — Pokémon Showcase & Scroll-Cinematic
+# ⚡ Pokemon-Website — Pokémon Showcase & Scroll-Cinematic(Fanprojekt)
 
 **A neon-drenched Pokémon landing experience: a draggable news-rondell with a surprise booster, a scroll-driven Pikachu & Squirtle cinematic, and a full 1,300-entry Pokédex with shiny hunting — all wrapped in GPU-composited glass over a drifting starfield.**
 
