@@ -78,8 +78,8 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   .holo-glitter, .holo-glitter2 { opacity: .8; }
 }
 
-/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite) ---------- */
-.glass-header { position: sticky; top: 0; z-index: 50; width: 100%;
+/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite, fixed, auto-hide) ---------- */
+.glass-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; width: 100%;
   display: flex; align-items: center;
   gap: clamp(12px,3vw,28px); padding: 12px clamp(14px,3vw,24px); border-radius: 0;
   background: linear-gradient(120deg, rgba(120,160,210,.20), rgba(120,160,210,.09) 40%, rgba(20,30,44,.22));
@@ -126,7 +126,7 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
 /* hero-head = eyebrow + title, zentriert über dem Rondell */
 .hero-head { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .stage { position: relative; z-index: 1; min-height: 100dvh; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: clamp(16px,4vw,48px); gap: clamp(18px,3vw,32px); text-align: center; }
+  justify-content: center; padding: clamp(16px,4vw,48px); padding-top: clamp(72px,11vw,84px); gap: clamp(18px,3vw,32px); text-align: center; }
 .eyebrow { letter-spacing: .32em; text-transform: uppercase; font-size: clamp(10px,2.6vw,13px);
   font-weight: 700; color: #b9a7e6; }
 .hero-pokemon { font-family: 'Pokemon Solid', 'Plus Jakarta Sans', sans-serif;

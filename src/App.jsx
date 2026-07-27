@@ -156,7 +156,8 @@ export default function App() {
       <button
         className={`header-edge${headerHidden ? ' is-visible' : ''}`}
         aria-label="Header einblenden"
-        onClick={() => setHeaderHidden(false)}
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setHeaderHidden(false) }}
+        onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); setHeaderHidden(false) }}
         tabIndex={headerHidden ? 0 : -1}
       >
         <span className="header-edge-nub" aria-hidden="true" />
