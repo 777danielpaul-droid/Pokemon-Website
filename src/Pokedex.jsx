@@ -42,16 +42,20 @@ export default function Pokedex() {
   }, [])
 
   // --- 2. Suche + Typ-Filter (debounced) ---
-  const applyFilter = useCallback((q, tf) => {
+  const applyFilter = useCallback(async (q, tf) => {
     if (!list) return
     const ql = q.trim().toLowerCase()
     let res = list
     if (tf) {
-      // Typ-Filter braucht Details -> nur über Cache
-      res = res.filter((p) => {
-        const c = cacheRef.current.get(p.name)
-        return c && c.types.some((t) => t.type.name === tf)
-      })
+      // echte Typ-Liste von PokeAPI -> Namen-Menge, gegen geladene list filtern
+      try {
+        const r = await fetch(`${API}/type/${tf}`)
+        const d = await r.json()
+        const names = new Set(d.pokemon.map((p) => p.pokemon.name))
+        res = res.filter((p) => names.has(p.name))
+      } catch {
+        res = []
+      }
     }
     if (ql) res = res.filter((p) => p.name.includes(ql))
     setFiltered(res)
@@ -66,11 +70,11 @@ export default function Pokedex() {
     debounceRef.current = setTimeout(() => applyFilter(v, typeFilter), 180)
   }
 
-  const toggleType = (t) => {
+  const toggleType = useCallback(async (t) => {
     const nt = typeFilter === t ? null : t
     setTypeFilter(nt)
-    applyFilter(query, nt)
-  }
+    await applyFilter(query, nt)
+  }, [applyFilter, query, typeFilter])
 
   // --- 3. Detail laden (mit Cache) ---
   const loadDetail = useCallback(async (name) => {
