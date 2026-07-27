@@ -201,7 +201,7 @@ export default function App() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Zum Seitenanfang"
         >
-          <span className="gh-dot" />Pokémon
+          <img className="gh-pokeball" src="/anim/pokeball.webp" alt="" aria-hidden="true" />Pokémon
         </button>
         <nav className="gh-nav" aria-label="Hauptnavigation">
           <a href="https://www.pokemon.com/de/pokedex/" target="_blank" rel="noreferrer">Pokédex</a>
@@ -220,7 +220,7 @@ export default function App() {
         onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); setHeaderHidden(false) }}
         tabIndex={headerHidden ? 0 : -1}
       >
-        <span className="header-edge-nub" aria-hidden="true" />
+        <img className="header-edge-nub" src="/anim/pokeball.webp" alt="" aria-hidden="true" />
       </button>
 
       <main className="stage">
@@ -284,7 +284,7 @@ export default function App() {
           <a href="#events" className="gf-link">Events</a>
           <a href="#shop" className="gf-link">Shop</a>
         </nav>
-        <div className="gf-brand"><span className="gf-dot" />Pokémon · Fan-Projekt</div>
+        <div className="gf-brand"><img className="gf-pokeball" src="/anim/pokeball.webp" alt="" aria-hidden="true" />Pokémon · Fan-Projekt</div>
       </footer>
 
       {/* ---------- Booster Open Modal ---------- */}
