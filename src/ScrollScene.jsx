@@ -38,9 +38,11 @@ export default function ScrollScene() {
       const row = (i / COLS) | 0
       const sx = col * FW
       const sy = row * FH
+      // COVER: Frame füllt den ganzen Viewport (keine schwarzen Ränder),
+      // leichter Zoom -> Rand minimal abgeschnitten (Himmel/Kies), Charaktere bleiben zentriert.
       const cw = canvas.clientWidth
       const ch = canvas.clientHeight
-      const scale = Math.min(cw / FW, ch / FH)
+      const scale = Math.max(cw / FW, ch / FH) * 1.02
       const dw = FW * scale
       const dh = FH * scale
       const dx = (cw - dw) / 2
