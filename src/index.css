@@ -173,23 +173,23 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   box-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(167,139,250,.5),
     0 0 34px rgba(109,40,217,.55), 0 0 60px rgba(123,30,43,.25); }
 
-/* Aktive Front-Karte: deutlicher Lila-Glow, kräftig pulsierend */
-.ring-card.is-front { border-color: rgba(196,181,253,.95);
-  box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 2px rgba(196,181,253,.8),
-    0 0 46px rgba(124,58,237,.85), 0 0 90px rgba(123,30,43,.45);
+/* Aktive Front-Karte: hellblau-fast-weißer Glow (wie Header), kräftig pulsierend */
+.ring-card.is-front { border-color: rgba(180,232,245,.95);
+  box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 2px rgba(180,232,245,.8),
+    0 0 46px rgba(127,212,232,.9), 0 0 90px rgba(196,181,253,.5);
   animation: cardPulse 2.6s ease-in-out infinite; }
 .ring-card.is-front::after { content: ""; position: absolute; inset: -3px; border-radius: 20px;
   pointer-events: none; z-index: -1;
-  box-shadow: 0 0 30px 6px rgba(124,58,237,.6), 0 0 60px 14px rgba(123,30,43,.35);
+  box-shadow: 0 0 30px 6px rgba(127,212,232,.65), 0 0 60px 14px rgba(196,181,253,.4);
   animation: cardHalo 2.6s ease-in-out infinite; }
 @keyframes cardPulse {
-  0%, 100% { box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 2px rgba(196,181,253,.7),
-    0 0 36px rgba(124,58,237,.65), 0 0 70px rgba(123,30,43,.32); }
-  50% { box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 2px rgba(220,210,255,.95),
-    0 0 64px rgba(139,82,245,.95), 0 0 120px rgba(123,30,43,.55); } }
+  0%, 100% { box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 2px rgba(180,232,245,.7),
+    0 0 36px rgba(127,212,232,.7), 0 0 70px rgba(196,181,253,.38); }
+  50% { box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 2px rgba(220,245,252,.95),
+    0 0 64px rgba(158,227,242,.98), 0 0 120px rgba(196,181,253,.6); } }
 @keyframes cardHalo {
-  0%, 100% { box-shadow: 0 0 22px 4px rgba(124,58,237,.45), 0 0 44px 10px rgba(123,30,43,.25); }
-  50% { box-shadow: 0 0 40px 10px rgba(139,82,245,.75), 0 0 80px 20px rgba(123,30,43,.45); } }
+  0%, 100% { box-shadow: 0 0 22px 4px rgba(127,212,232,.5), 0 0 44px 10px rgba(196,181,253,.3); }
+  50% { box-shadow: 0 0 40px 10px rgba(158,227,242,.8), 0 0 80px 20px rgba(196,181,253,.5); } }
 
 .ctl { width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(196,181,253,.35);
   background: rgba(109,40,217,.18); color: #e9e1ff; font-size: 22px; line-height: 1;
