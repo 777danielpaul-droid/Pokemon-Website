@@ -118,13 +118,13 @@ export default function App() {
   // Rondell-Geometrie als flacher SEITEN-FÄCHER (Ellipse mit Rx >> Ry):
   // Karten bleiben seitlich gefächert, aber vertikal gestaucht -> platzsparend,
   // kein Kreis/Draufsicht. Hintere Karten durch steile Tiefenkurve hinter Front verdeckt.
-  // Ring-Größe gedeckelt: misst .ring-wrap-Breite, aber nie groesser als 520px
-  // -> auf Desktop kompakt, nicht riesig (verhinderte das "Rondell zu weit unten")
-  const Wc = Math.min(W, 460)
+  // Ring-Größe gedeckelt: misst .ring-wrap-Breite, aber nie groesser als 420px
+  // -> kompakt im fixed Hero-Block, Rondell direkt unter dem Hero-Text
+  const Wc = Math.min(W, 420)
   const Rx = Wc * 0.46         // horizontale Spreizung (seitlich, Fächer)
-  const Ry = Wc * 0.15         // vertikaler Radius (noch flacher -> hintere Karten rücken weiter nach unten, werden von vorderen verdeckt)
-  const cardW = Wc * 0.36
-  const cardH = Wc * 0.50
+  const Ry = Wc * 0.14         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
+  const cardW = Wc * 0.34
+  const cardH = Wc * 0.46
   const offY = Ry * 0.30       // Ring leicht nach unten -> Nachbarn wirken leicht höher
 
   return (
