@@ -68,7 +68,11 @@ export default function ScrollScene() {
     const updateActive = () => {
       const sec = sectionRef.current
       if (!sec) return
-      const visible = sec.getBoundingClientRect().top <= 1
+      const r = sec.getBoundingClientRect()
+      // Canvas NUR sichtbar, solange die Story-Sektion im Viewport ist
+      // (top<=0 = Hero weg, bottom>=1 = noch nicht ganz durchgescrollt).
+      // Danach aus -> verdeckt z.B. den Pokedex am Seitenende nicht.
+      const visible = r.top <= 1 && r.bottom >= 1
       canvas.classList.toggle('is-active', visible)
     }
 

@@ -324,3 +324,76 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
 @keyframes boosterPulse { 0%,100%{opacity:.45;} 50%{opacity:1;} }
 .booster-reset { font-size: 12px; letter-spacing: .2em; color: #8c7bb8; background: none; border: 1px solid #3a2a5e; border-radius: 8px; padding: 8px 14px; cursor: pointer; }
 .booster-reset:hover { background: rgba(109,40,217,.3); }
+
+/* ============ POKEDEX (eigene Section am Seitenende, als Karte) ============ */
+.pokedex-section { position: relative; z-index: 2; min-height: 100vh; padding: clamp(40px,8vw,90px) 16px 80px;
+  display: flex; justify-content: center; align-items: flex-start; }
+.pokedex-card { width: 100%; max-width: 1000px;
+  background: linear-gradient(165deg, rgba(28,16,56,.72), rgba(14,7,32,.72));
+  border: 1px solid rgba(124,58,237,.4);
+  border-radius: 22px; backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.7), inset 0 0 40px rgba(109,40,217,.12);
+  padding: clamp(18px,3vw,34px); }
+.pokedex-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.pokedex-title { font-family: 'Pokemon Solid','Plus Jakarta Sans',sans-serif; font-weight: 400;
+  font-size: clamp(30px,6vw,52px); margin: 0; color: #ffde00;
+  -webkit-text-stroke: 2px #3b4cca;
+  text-shadow: 0 1px 0 #2a3694,0 2px 0 #28328a,0 3px 0 #222d80,0 4px 0 #1e296f,0 5px 0 #1c2462,0 6px 6px rgba(0,0,0,.5); }
+.pokedex-sub { margin: 4px 0 0; color: #b9aee0; font-size: 13px; letter-spacing: .04em; }
+.dex-rand { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: #fff;
+  background: linear-gradient(135deg,var(--lila),#22d3ee); border: none; border-radius: 12px;
+  padding: 10px 16px; cursor: pointer; box-shadow: 0 8px 24px -8px rgba(34,211,238,.6); }
+.dex-rand:disabled { opacity: .6; cursor: default; }
+.pokedex-controls { margin: 20px 0 24px; display: flex; flex-direction: column; gap: 14px; }
+.dex-search { width: 100%; padding: 14px 18px; font-size: 16px; color: #f4f1fb;
+  background: rgba(7,7,13,.6); border: 1px solid rgba(124,58,237,.5); border-radius: 14px; outline: none; }
+.dex-search:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34,211,238,.2); }
+.dex-search::placeholder { color: #8a7fb5; }
+.dex-types { display: flex; flex-wrap: wrap; gap: 8px; }
+.dex-type { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: capitalize;
+  color: #fff; border: 1px solid var(--tc); background: color-mix(in srgb, var(--tc) 22%, transparent);
+  border-radius: 999px; padding: 6px 12px; cursor: pointer; opacity: .8; transition: .15s; }
+.dex-type:hover { opacity: 1; }
+.dex-type.is-on { background: var(--tc); color: #08080f; opacity: 1; box-shadow: 0 0 14px var(--tc); }
+.dex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 12px; }
+.dex-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 6px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
+  cursor: pointer; color: #f4f1fb; transition: .15s; }
+.dex-cell:hover { background: rgba(124,58,237,.2); border-color: rgba(34,211,238,.5); }
+.dex-sprite { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
+.dex-id { font-size: 11px; color: #9d92c4; }
+.dex-name { font-size: 13px; font-weight: 700; letter-spacing: .02em; text-transform: capitalize; }
+.dex-pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 22px; }
+.dex-empty { text-align: center; color: #b9aee0; padding: 40px 10px; font-size: 15px; }
+.dex-try { display: inline-block; margin-left: 8px; background: none; border: 1px solid #3a2a5e;
+  color: #cbb9ff; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+/* Detail-Modal */
+.deck-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(4,4,9,.8);
+  backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 18px; }
+.deck-modal { position: relative; width: 100%; max-width: 460px; max-height: 90vh; overflow: auto;
+  background: linear-gradient(165deg, rgba(28,16,56,.96), rgba(14,7,32,.98));
+  border: 1px solid rgba(34,211,238,.5); border-radius: 22px; padding: 26px 22px;
+  box-shadow: 0 30px 90px -16px rgba(0,0,0,.85), inset 0 0 40px rgba(109,40,217,.16); }
+.deck-x { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #fff; cursor: pointer; font-size: 15px; }
+.deck-nav { position: absolute; top: 12px; left: 12px; display: flex; gap: 8px; }
+.deck-sprite-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 10px 0 4px; }
+.deck-sprite { width: 150px; height: 150px; object-fit: contain; image-rendering: pixelated;
+  filter: drop-shadow(0 0 16px rgba(34,211,238,.4)); }
+.deck-shiny-btn { font-size: 12px; font-weight: 700; color: #cbb9ff; background: rgba(124,58,237,.25);
+  border: 1px solid rgba(124,58,237,.5); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.deck-name { text-align: center; font-size: 26px; font-weight: 800; text-transform: capitalize; color: #fff; margin-top: 6px; }
+.deck-id { color: #9d92c4; font-weight: 600; margin-right: 8px; font-size: 18px; }
+.deck-types { display: flex; gap: 8px; justify-content: center; margin: 10px 0 16px; }
+.deck-type { font-size: 12px; font-weight: 700; letter-spacing: .04em; color: #08080f;
+  border-radius: 999px; padding: 5px 14px; text-transform: capitalize; }
+.deck-stats { display: flex; flex-direction: column; gap: 9px; margin: 6px 0 16px; }
+.deck-stat { display: grid; grid-template-columns: 96px 36px 1fr; align-items: center; gap: 8px; font-size: 12px; }
+.ds-label { color: #b9aee0; text-transform: capitalize; }
+.ds-val { color: #fff; font-weight: 700; text-align: right; }
+.ds-bar { height: 8px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; }
+.ds-fill { height: 100%; border-radius: 999px; }
+.deck-meta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; color: #cbb9ff; font-size: 13px; }
+.deck-loading, .deck-nf { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 201; background: rgba(20,12,40,.95); border: 1px solid rgba(124,58,237,.5);
+  border-radius: 12px; padding: 10px 18px; color: #fff; font-size: 14px; }

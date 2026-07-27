@@ -4,6 +4,7 @@ import { cards, booster } from './data.js'
 import Starfield from './Starfield.jsx'
 import ScrollScene from './ScrollScene.jsx'
 import BoosterModal from './BoosterModal.jsx'
+import Pokedex from './Pokedex.jsx'
 
 const DEG = Math.PI / 180
 
@@ -254,6 +255,9 @@ export default function App() {
 
       {/* ---------- Scroll-getriebene Anim-Szene: Frame 0 unter Hero, Scroll startet Sequenz ---------- */}
       <ScrollScene />
+
+      {/* ---------- Pokedex (erscheint am Ende der Seite, nach der Animation) ---------- */}
+      <Pokedex />
 
       {/* ---------- Booster Open Modal ---------- */}
       {boosterOpen && <BoosterModal onClose={() => setBoosterOpen(false)} />}
