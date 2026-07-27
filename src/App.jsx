@@ -41,6 +41,7 @@ export default function App() {
   const wrapRef = useRef(null)
   const ringHover = useRef(false)
   const seen = useRef(new Set())
+  const spinDir = useRef(1)            // 1 = vorwärts (runter), -1 = rückwärts (hoch) — steuert seen-Zählung
   const { w: W } = useSize(wrapRef)
   const [active, setActive] = useState(0)
   const [hovered, setHovered] = useState(null)
@@ -116,9 +117,9 @@ export default function App() {
         if (d < bestDiff) { bestDiff = d; best = i }
       }
       setActive(best)
-      // nur als "gesehen" zählen, wenn wirklich an der Front zur Ruhe gekommen
-      // (nicht bei jedem Zwischen-Frame beim Drag/wheel-Schwenken)
-      if (bestDiff < step * 0.5 && !drag.on) seen.current.add(best)
+      // nur als "gesehen" zählen bei VORWÄRTS-Drehen (runter), wirklich an Front zur Ruhe
+      // (nicht bei Rückwärts/Hoch-Scroll, nicht bei jedem Zwischen-Frame)
+      if (bestDiff < step * 0.5 && !drag.on && spinDir.current > 0) seen.current.add(best)
     })
     return unsub
   }, [n, rot, step])
@@ -139,7 +140,7 @@ export default function App() {
     target.current = snapped
     animate(rot, snapped, { type: 'spring', stiffness: 120, damping: 20 })
   }
-  const onWheel = (e) => { target.current += e.deltaY * 0.18; rot.set(target.current) }
+  const onWheel = (e) => { spinDir.current = e.deltaY >= 0 ? 1 : -1; target.current += e.deltaY * 0.18; rot.set(target.current) }
   const onRingEnter = () => { ringHover.current = true }
   const onRingLeave = () => { ringHover.current = false }
   // Desktop wheel-PIN: Cursor am Rondell UND nicht alle n Karten gesehen -> Seite pinnen
@@ -148,9 +149,13 @@ export default function App() {
     const el = wrapRef.current
     if (!el) return
     const onWheelNative = (e) => {
-      if (ringHover.current && seen.current.size < n) {
-        e.preventDefault()
-        onWheel(e)
+      if (!ringHover.current) return
+      if (e.deltaY > 0) {
+        // RUNTER: pinnen + drehen, nach allen n Karten freigeben -> Anim-Szene
+        if (seen.current.size < n) { e.preventDefault(); onWheel(e) }
+      } else {
+        // HOCH: immer unendlich durchdrehen, nie freigeben, seen nicht verbrauchen
+        e.preventDefault(); onWheel(e)
       }
     }
     el.addEventListener('wheel', onWheelNative, { passive: false })
