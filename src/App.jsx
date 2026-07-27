@@ -97,8 +97,24 @@ export default function App() {
       <div className="holo-glitter2" aria-hidden="true" />
       <div className="holo-grain" aria-hidden="true" />
 
+      {/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite, sticky) ---------- */}
+      <header className="glass-header">
+        <div className="gh-glow" aria-hidden="true" />
+        <a className="gh-brand" href="https://www.pokemon.com/de" target="_blank" rel="noreferrer">
+          <span className="gh-dot" />Pokémon<span className="gh-brand-dim">.de</span>
+        </a>
+        <nav className="gh-nav" aria-label="Hauptnavigation">
+          <a href="https://www.pokemon.com/de/pokedex/" target="_blank" rel="noreferrer">Pokédex</a>
+          <a href="https://www.pokemon.com/de/news" target="_blank" rel="noreferrer">News</a>
+          <a href="https://www.pokemon.com/de/video" target="_blank" rel="noreferrer">TV</a>
+          <a href="https://www.pokemon.com/de/pokemon-tcg" target="_blank" rel="noreferrer">Sammelkarten</a>
+          <a href="https://www.pokemon.com/de/pokemon-go" target="_blank" rel="noreferrer">Pokémon GO</a>
+          <a href="https://www.pokemon.com/de/spiele" target="_blank" rel="noreferrer">Spiele</a>
+        </nav>
+      </header>
+
       <main className="stage">
-        <div>
+        <div className="hero-head">
           <div className="eyebrow">Pokémon.de · Rondell</div>
           <h1 className="title">Infos im Kreis</h1>
         </div>
