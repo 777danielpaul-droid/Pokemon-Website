@@ -173,6 +173,17 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   box-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(167,139,250,.5),
     0 0 34px rgba(109,40,217,.55), 0 0 60px rgba(123,30,43,.25); }
 
+/* Aktive Front-Karte: matter Lila/Bordeaux-Glow, sanft pulsierend */
+.ring-card.is-front { border-color: rgba(167,139,250,.9);
+  box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 1px rgba(167,139,250,.6),
+    0 0 38px rgba(109,40,217,.6), 0 0 70px rgba(123,30,43,.3);
+  animation: cardPulse 3.4s ease-in-out infinite; }
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 1px rgba(167,139,250,.6),
+    0 0 30px rgba(109,40,217,.5), 0 0 56px rgba(123,30,43,.22); }
+  50% { box-shadow: 0 12px 44px rgba(0,0,0,.62), 0 0 0 1px rgba(196,181,253,.8),
+    0 0 50px rgba(124,58,237,.72), 0 0 88px rgba(123,30,43,.38); } }
+
 .ctl { width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(196,181,253,.35);
   background: rgba(109,40,217,.18); color: #e9e1ff; font-size: 22px; line-height: 1;
   cursor: pointer; backdrop-filter: blur(6px); transition: background .18s ease, transform .18s ease; }

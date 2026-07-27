@@ -189,7 +189,8 @@ export default function App() {
           >
             {cards.map((c, i) => (
               <CardItem key={c.href} card={c} index={i} step={step} rot={rot}
-                Rx={Rx} Ry={Ry} offY={offY} cardW={cardW} cardH={cardH} hovered={hovered} setHovered={setHovered} />
+                Rx={Rx} Ry={Ry} offY={offY} cardW={cardW} cardH={cardH} hovered={hovered} setHovered={setHovered}
+                active={active} setActive={setActive} />
             ))}
             <div className="ring-core" />
         </div>
@@ -212,8 +213,9 @@ export default function App() {
   )
 }
 
-function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered, setHovered }) {
+function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered, setHovered, active, setActive }) {
   const isHover = hovered === index
+  const isFront = active === index
   const tf = useTransform(rot, (r) => {
     const a = index * step + r
     const front = Math.cos(a * DEG)
@@ -239,11 +241,11 @@ function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered,
   })
   return (
     <motion.a href={card.href} target="_blank" rel="noreferrer"
-      className={`ring-card ${isHover ? 'is-hover' : ''}`}
+      className={`ring-card ${isHover ? 'is-hover' : ''}${isFront ? ' is-front' : ''}`}
       style={{ width: cardW, height: cardH, transform: tf, opacity: op, zIndex: z, cursor: 'pointer' }}
       onHoverStart={() => setHovered(index)}
       onHoverEnd={() => setHovered((h) => (h === index ? null : h))}
-      onClick={() => setHovered((h) => (h === index ? null : index))}
+      onClick={(e) => { e.preventDefault(); setHovered(index); setActive(index) }}
       draggable={false}>
       <img className="img" src={card.img} alt={card.title} loading="lazy" draggable={false}
         style={{ objectPosition: card.objectPosition || 'center' }} />
