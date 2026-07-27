@@ -45,6 +45,7 @@ export default function App() {
   const [hovered, setHovered] = useState(null)
   const [headerHidden, setHeaderHidden] = useState(false)
   const [boosterOpen, setBoosterOpen] = useState(false)
+  const [boosterUsed, setBoosterUsed] = useState(false)
 
   // Beim Laden/Reload IMMER zum Seitenanfang springen (Browser-Scroll-Restore aus)
   useEffect(() => {
@@ -233,7 +234,8 @@ export default function App() {
             {items.map((c, i) => (
               <CardItem key={(c.booster ? 'booster' : c.href)} card={c} index={i} step={step} rot={rot}
                 Rx={Rx} Ry={Ry} offY={offY} cardW={cardW} cardH={cardH} hovered={hovered} setHovered={setHovered}
-                active={active} setActive={setActive} onBooster={() => setBoosterOpen(true)} />
+                active={active} setActive={setActive} onBooster={() => { if (!boosterUsed) { setBoosterUsed(true); setBoosterOpen(true) } }}
+                boosterUsed={boosterUsed} />
             ))}
             <div className="ring-core" />
         </div>
@@ -259,7 +261,7 @@ export default function App() {
   )
 }
 
-function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered, setHovered, active, setActive, onBooster }) {
+function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered, setHovered, active, setActive, onBooster, boosterUsed }) {
   const isHover = hovered === index
   const isFront = active === index
   const isBooster = !!card.booster
@@ -287,9 +289,9 @@ function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered,
   // BOOSTER-PACK (eigenständiger Kartentyp): lila Pack, "POKEMON" drauf
   if (isBooster) {
     return (
-      <motion.button type="button" aria-label="Booster öffnen"
-        className={`ring-card booster-card ${isHover ? 'is-hover' : ''}${isFront ? 'is-front' : ''}`}
-        style={{ width: cardW, height: cardH, transform: tf, opacity: op, zIndex: z, cursor: 'pointer' }}
+      <motion.button type="button" aria-label={boosterUsed ? 'Booster bereits geöffnet' : 'Booster öffnen'}
+        className={`ring-card booster-card ${isHover ? 'is-hover' : ''}${isFront ? 'is-front' : ''}${boosterUsed ? ' is-used' : ''}`}
+        style={{ width: cardW, height: cardH, transform: tf, opacity: op, zIndex: z, cursor: boosterUsed ? 'default' : 'pointer' }}
         onPointerDown={(e) => e.stopPropagation()}
         onHoverStart={() => setHovered(index)}
         onHoverEnd={() => setHovered((h) => (h === index ? null : h))}
@@ -304,6 +306,7 @@ function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered,
           </div>
           <div className="booster-perf" />
         </div>
+        {boosterUsed && <div className="booster-used-stamp">✓ GEÖFFNET</div>}
       </motion.button>
     )
   }
