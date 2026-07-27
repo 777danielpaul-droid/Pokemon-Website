@@ -1,28 +1,26 @@
 import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const FRAMES = 141        // Anzahl Frames im Sheet
 const COLS = 12           // Spalten im Sprite-Sheet (12x12 Grid)
 const FW = 1376           // Frame-Breite im Sheet (Original)
 const FH = 768            // Frame-Höhe im Sheet (Original)
 const SHEET = '/anim/sheet.jpg'
+const HOLD = 1 / 6        // Frame 0 hält für ~1 Screen (100vh von 600vh)
 
 /**
- * Scroll-gesteuerte frame-to-frame Animation als HINTERGRUND einer Content-Sektion.
- *  - Desktop: Sektion ist ~300vh hoch, Canvas sticky (top:0, 100vh) -> bleibt während
- *    des Durchscrollens sichtbar; Scroll-Fortschritt treibt frameIndex (scrub).
- *  - Mobile: kein Pin/scrub (ruckelt auf Touch) -> Canvas läuft als autoplay-loop,
- *    Content-Layer scrollt normal drüber.
- * Karten-Szene oben bleibt unberührt: man scrollt an ihr vorbei, dann kommt diese Szene.
+ * Scroll-gesteuerte frame-to-frame Animation als eigene Section UNTER dem Hero.
+ *  - Desktop: Sektion ist ~600vh hoch. Frame 0 ist sichtbar, sobald man am Hero
+ *    vorbeigescrollt hat (erster Screen). Beim WeiterScrollen läuft die Sequenz
+ *    durch die Frames (eigener scroll-Listener -> progress aus getBoundingClientRect).
+ *  - Mobile: kein scrub (ruckelt auf Touch) -> Canvas läuft als autoplay-loop.
+ * Hero oben bleibt unberührt: man scrollt an ihm vorbei, dann kommt diese Szene.
  */
 export default function ScrollScene() {
   const sectionRef = useRef(null)
   const canvasRef = useRef(null)
-  const imgRef = useRef(null)
   const loadedRef = useRef(false)
+  const lastIdx = useRef(0)
+  const rafPending = useRef(false)
 
   useEffect(() => {
     const isMobile = window.matchMedia('(max-width: 768px)').matches
@@ -30,8 +28,8 @@ export default function ScrollScene() {
     const ctx = canvas.getContext('2d')
     const img = new Image()
     img.src = SHEET
-    imgRef.current = img
 
+    // CONTAIN: ganzer Frame sichtbar, letterbox statt Zoom (kein Abschneiden)
     const drawFrame = (idx) => {
       if (!loadedRef.current) return
       const i = Math.max(0, Math.min(FRAMES - 1, idx | 0))
@@ -39,15 +37,16 @@ export default function ScrollScene() {
       const row = (i / COLS) | 0
       const sx = col * FW
       const sy = row * FH
-      // Canvas auf Gerätegröße skalieren (cover)
       const cw = canvas.clientWidth
       const ch = canvas.clientHeight
-      const scale = Math.max(cw / FW, ch / FH)
+      const scale = Math.min(cw / FW, ch / FH)
       const dw = FW * scale
       const dh = FH * scale
       const dx = (cw - dw) / 2
       const dy = (ch - dh) / 2
       ctx.clearRect(0, 0, cw, ch)
+      ctx.fillStyle = '#07070d'
+      ctx.fillRect(0, 0, cw, ch)
       ctx.drawImage(img, sx, sy, FW, FH, dx, dy, dw, dh)
     }
 
@@ -59,8 +58,25 @@ export default function ScrollScene() {
       drawFrame(lastIdx.current)
     }
 
-    const lastIdx = { current: 0 }
     img.onload = () => { loadedRef.current = true; resize() }
+
+    // Eigener scroll-Listener: progress aus Section-Rect (robust, kein Pin-Magic)
+    const onScroll = () => {
+      if (rafPending.current) return
+      rafPending.current = true
+      requestAnimationFrame(() => {
+        rafPending.current = false
+        const sec = sectionRef.current
+        if (!sec) return
+        const rect = sec.getBoundingClientRect()
+        const total = rect.height - window.innerHeight
+        // progress: 0 wenn Section-Top am oberen Rand, 1 wenn Bottom erreicht
+        const p = Math.max(0, Math.min(1, -rect.top / total))
+        const fp = p <= HOLD ? 0 : (p - HOLD) / (1 - HOLD)
+        lastIdx.current = fp * (FRAMES - 1)
+        drawFrame(lastIdx.current)
+      })
+    }
 
     let raf = null
     let loopStart = 0
@@ -72,66 +88,27 @@ export default function ScrollScene() {
       raf = requestAnimationFrame(loop)
     }
 
-    let st = null
     if (!isMobile) {
-      // Desktop: scroll-scrub über Sektionshöhe
-      st = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: true,
-        onUpdate: (self) => {
-          lastIdx.current = self.progress * (FRAMES - 1)
-          drawFrame(lastIdx.current)
-        }
-      })
-      // Initial zeichnen, sobald geladen
-      const init = setInterval(() => {
-        if (loadedRef.current) { drawFrame(0); clearInterval(init) }
-      }, 60)
+      window.addEventListener('scroll', onScroll, { passive: true })
       window.addEventListener('resize', resize)
+      const init = setInterval(() => {
+        if (loadedRef.current) { drawFrame(0); onScroll(); clearInterval(init) }
+      }, 60)
     } else {
-      // Mobile: loop
       raf = requestAnimationFrame(loop)
     }
 
     return () => {
-      if (st) st.kill()
-      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', resize)
+      if (raf) cancelAnimationFrame(raf)
     }
   }, [])
 
   return (
-    <section id="story" ref={sectionRef} className="story-section">
+    <section id="story" ref={sectionRef} className="story-section" aria-label="Animation">
       <div className="story-bg" aria-hidden="true">
         <canvas ref={canvasRef} className="story-canvas" />
-        <div className="story-bg-dim" />
-      </div>
-
-      {/* Content-Layer: später mit echten Elementen füllen (Platzhalter) */}
-      <div className="story-content">
-        <div className="story-block">
-          <div className="story-card-placeholder">
-            <span className="story-kicker">Neu</span>
-            <h2 className="story-title">Szene 01 — hier kommt später Content hin</h2>
-            <p className="story-text">Frame-to-frame Hintergrund läuft passend zum Scroll-Fortschritt. Dieser Block ist ein Platzhalter für echte Inhalte.</p>
-          </div>
-        </div>
-        <div className="story-block">
-          <div className="story-card-placeholder">
-            <span className="story-kicker">Story</span>
-            <h2 className="story-title">Szene 02 — weiterer Content-Block</h2>
-            <p className="story-text">Blöcke stapeln sich untereinander, der Canvas bleibt als gepinnter Hintergrund sichtbar.</p>
-          </div>
-        </div>
-        <div className="story-block">
-          <div className="story-card-placeholder">
-            <span className="story-kicker">Mehr</span>
-            <h2 className="story-title">Szene 03 — noch ein Block</h2>
-            <p className="story-text">Später nach Belieben erweiterbar — einfach weitere <code>.story-block</code> hinzufügen.</p>
-          </div>
-        </div>
       </div>
     </section>
   )

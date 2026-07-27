@@ -206,13 +206,10 @@ export default function App() {
           </div>
         </div>
         </div>{/* /.stage-inner */}
-
-        {/* ---------- Scroll-getriebene Anim-Szene (frame-to-frame Hintergrund) ---------- */}
-        <ScrollScene />
-
-        {/* TODO: temporärer Spacer zum Testen des Header-Auto-Hide — später durch echte untere Elemente ersetzen */}
-        <div className="scroll-spacer" aria-hidden="true" />
       </main>
+
+      {/* ---------- Scroll-getriebene Anim-Szene: Frame 0 unter Hero, Scroll startet Sequenz ---------- */}
+      <ScrollScene />
     </>
   )
 }
