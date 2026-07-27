@@ -73,6 +73,9 @@ export default function ScrollScene() {
       const vh = window.innerHeight || 1
       const visible = r.top <= vh * 0.55 && r.bottom >= vh * 0.45
       canvas.classList.toggle('is-active', visible)
+      // gleiche Behandlung wie .hero-img: Holo-Blobs/Sheen/Grain blenden mit der Szene
+      document.querySelectorAll('.story-holo, .story-sheen, .story-grain')
+        .forEach(el => el.classList.toggle('is-active', visible))
     }
 
     // Eigener scroll-Listener: progress aus Section-Rect
@@ -126,6 +129,13 @@ export default function ScrollScene() {
 
   return (
     <section id="story" ref={sectionRef} className="story-section" aria-label="Animation">
+      {/* Bunter Holo-Hintergrund (gleiche Behandlung wie .hero-img) */}
+      <div className="story-holo" aria-hidden="true">
+        <span className="blob b1" /><span className="blob b2" /><span className="blob b3" />
+        <span className="blob b4" /><span className="blob b5" /><span className="blob b6" /><span className="blob b7" />
+      </div>
+      <div className="story-sheen" aria-hidden="true" />
+      <div className="story-grain" aria-hidden="true" />
       <canvas ref={canvasRef} className="story-canvas" aria-hidden="true" />
       <div className="story-dim" aria-hidden="true" />
       <div className="story-badges" aria-hidden="true">
