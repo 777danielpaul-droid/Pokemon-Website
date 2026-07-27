@@ -122,10 +122,10 @@ export default function App() {
   // aber gedeckelt auf 680px -> auf Desktop deutlich größere Karten.
   const Wc = Math.min(W, 680)
   const Rx = Wc * 0.46         // horizontale Spreizung (seitlich, Fächer)
-  const Ry = Wc * 0.15         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
+  const Ry = Wc * 0.11         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
   const cardW = Wc * 0.32
-  const cardH = Wc * 0.44
-  const offY = Ry * 0.30       // Ring leicht nach unten -> Nachbarn wirken leicht höher
+  const cardH = Wc * 0.38
+  const offY = -Ry * 0.28      // Ring leicht nach OBEN -> Front-Karte endet sicher über dem Footer-Hinweis
 
   return (
     <>
@@ -194,12 +194,14 @@ export default function App() {
             <div className="ring-core" />
         </div>
 
-        <p className="ring-hint">Ziehen oder scrollen zum Drehen · tippe eine Karte für Details</p>
+        <div className="ring-footer">
+          <p className="ring-hint">Ziehen oder scrollen zum Drehen · tippe eine Karte für Details</p>
 
-        <div className="flex items-center gap-3">
-          <button className="ctl" onClick={() => nudge(-1)} aria-label="Zurück">‹</button>
-          <span className="hint">{active + 1} / {n} · {categoryOf(cards[active]?.title || '')}</span>
-          <button className="ctl" onClick={() => nudge(1)} aria-label="Weiter">›</button>
+          <div className="flex items-center gap-3">
+            <button className="ctl" onClick={() => nudge(-1)} aria-label="Zurück">‹</button>
+            <span className="hint">{active + 1} / {n} · {categoryOf(cards[active]?.title || '')}</span>
+            <button className="ctl" onClick={() => nudge(1)} aria-label="Weiter">›</button>
+          </div>
         </div>
         </div>{/* /.stage-inner */}
 
