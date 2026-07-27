@@ -9,11 +9,12 @@ const HOLD = 1 / 6        // Frame 0 hält für ~1 Screen (100vh von 600vh)
 
 /**
  * Scroll-gesteuerte frame-to-frame Animation als eigene Section UNTER dem Hero.
- *  - Desktop: Sektion ist ~600vh hoch. Frame 0 ist sichtbar, sobald man am Hero
- *    vorbeigescrollt hat (erster Screen). Beim WeiterScrollen läuft die Sequenz
- *    durch die Frames (eigener scroll-Listener -> progress aus getBoundingClientRect).
+ *  - Canvas ist position:fixed, vollflächig, z-index:1 (über den Hero-BG-Layern z:0,
+ *    unter dem Header z:50). IntersectionObserver schaltet ihn NUR an, solange die
+ *    #story-Sektion im Viewport ist -> Hero bleibt sauber, Animation überdeckt nichts.
+ *  - Desktop: Sektion ist ~600vh hoch. Frame 0 sichtbar sobald man am Hero vorbei ist
+ *    (erster Screen). Weiterscrollen -> Sequenz durch alle Frames (scroll-Listener).
  *  - Mobile: kein scrub (ruckelt auf Touch) -> Canvas läuft als autoplay-loop.
- * Hero oben bleibt unberührt: man scrollt an ihm vorbei, dann kommt diese Szene.
  */
 export default function ScrollScene() {
   const sectionRef = useRef(null)
@@ -60,23 +61,35 @@ export default function ScrollScene() {
 
     img.onload = () => { loadedRef.current = true; resize() }
 
-    // Eigener scroll-Listener: progress aus Section-Rect (robust, kein Pin-Magic)
+    // Canvas sichtbar schalten: erst wenn Hero komplett weg ist (section.top <= 0),
+    // sonst deckt die Animation den Hero nicht ab. Deterministisch via scroll-Listener.
+    const updateActive = () => {
+      const sec = sectionRef.current
+      if (!sec) return
+      const visible = sec.getBoundingClientRect().top <= 1
+      canvas.classList.toggle('is-active', visible)
+    }
+
+    // Eigener scroll-Listener: progress aus Section-Rect
     const onScroll = () => {
       if (rafPending.current) return
       rafPending.current = true
       requestAnimationFrame(() => {
         rafPending.current = false
+        updateActive()
         const sec = sectionRef.current
         if (!sec) return
         const rect = sec.getBoundingClientRect()
         const total = rect.height - window.innerHeight
-        // progress: 0 wenn Section-Top am oberen Rand, 1 wenn Bottom erreicht
         const p = Math.max(0, Math.min(1, -rect.top / total))
         const fp = p <= HOLD ? 0 : (p - HOLD) / (1 - HOLD)
         lastIdx.current = fp * (FRAMES - 1)
         drawFrame(lastIdx.current)
       })
     }
+
+    // IntersectionObserver nicht nötig -> raus
+    window.addEventListener('scroll', onScroll, { passive: true })
 
     let raf = null
     let loopStart = 0
@@ -92,7 +105,7 @@ export default function ScrollScene() {
       window.addEventListener('scroll', onScroll, { passive: true })
       window.addEventListener('resize', resize)
       const init = setInterval(() => {
-        if (loadedRef.current) { drawFrame(0); onScroll(); clearInterval(init) }
+        if (loadedRef.current) { drawFrame(0); updateActive(); onScroll(); clearInterval(init) }
       }, 60)
     } else {
       raf = requestAnimationFrame(loop)
@@ -107,9 +120,7 @@ export default function ScrollScene() {
 
   return (
     <section id="story" ref={sectionRef} className="story-section" aria-label="Animation">
-      <div className="story-bg" aria-hidden="true">
-        <canvas ref={canvasRef} className="story-canvas" />
-      </div>
+      <canvas ref={canvasRef} className="story-canvas" aria-hidden="true" />
     </section>
   )
 }
