@@ -325,64 +325,98 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
 .booster-reset { font-size: 12px; letter-spacing: .2em; color: #8c7bb8; background: none; border: 1px solid #3a2a5e; border-radius: 8px; padding: 8px 14px; cursor: pointer; }
 .booster-reset:hover { background: rgba(109,40,217,.3); }
 
-/* ============ POKEDEX (eigene Section am Seitenende, als Karte) ============ */
+/* ============ POKEDEX (als modernes Smartphone verpackt) ============ */
 .pokedex-section { position: relative; z-index: 2; min-height: 100vh; padding: clamp(40px,8vw,90px) 16px 80px;
   display: flex; justify-content: center; align-items: flex-start; }
-.pokedex-card { width: 100%; max-width: 1000px;
-  background: linear-gradient(165deg, rgba(28,16,56,.72), rgba(14,7,32,.72));
-  border: 1px solid rgba(124,58,237,.4);
-  border-radius: 22px; backdrop-filter: blur(14px) saturate(1.2);
-  box-shadow: 0 30px 80px -20px rgba(0,0,0,.7), inset 0 0 40px rgba(109,40,217,.12);
-  padding: clamp(18px,3vw,34px); }
+/* Geräte-Gehäuse: schwarzes Glas, kantig, randloser Screen */
+.phone { width: 100%; max-width: 420px; perspective: 1200px; }
+.phone-frame { position: relative; border-radius: 46px; padding: 14px 14px 18px;
+  background: linear-gradient(160deg, #1c1c24, #0a0a0f 60%, #060608);
+  border: 1px solid rgba(124,58,237,.45);
+  box-shadow:
+    0 40px 90px -26px rgba(0,0,0,.85),
+    0 0 0 2px rgba(34,211,238,.06),
+    inset 0 0 26px rgba(124,58,237,.14),
+    0 0 60px -10px rgba(109,40,217,.4); }
+/* Metallrahmen-Glare */
+.phone-frame::before { content: ""; position: absolute; inset: 0; border-radius: 46px; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,.10), transparent 30%, transparent 70%, rgba(255,255,255,.05)); }
+.phone-notch { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 120px; height: 22px;
+  background: #060608; border-radius: 0 0 16px 16px; z-index: 5; display: flex; align-items: center; justify-content: center; }
+.phone-cam { width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #2a2a3a, #000);
+  box-shadow: 0 0 0 2px rgba(34,211,238,.25), 0 0 6px rgba(34,211,238,.4); }
+/* Screen: randlos, eigenes Scrollen */
+.phone-screen { position: relative; height: 70vh; min-height: 520px; border-radius: 34px; overflow-y: auto;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(34,211,238,.08), transparent 55%),
+    linear-gradient(180deg, #0e0b1c, #070611);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 30px 16px 18px;
+  scrollbar-width: thin; scrollbar-color: rgba(124,58,237,.5) transparent; }
+.phone-screen::-webkit-scrollbar { width: 6px; }
+.phone-screen::-webkit-scrollbar-thumb { background: rgba(124,58,237,.5); border-radius: 999px; }
+/* dezente Glas-Reflex über dem Screen */
+.phone-screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 34px;
+  background: linear-gradient(120deg, rgba(255,255,255,.06) 0%, transparent 18%, transparent 82%, rgba(255,255,255,.03) 100%); }
+/* Hardware-Keys (Touch-Buttons unter dem Screen) */
+.phone-keys { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; }
+.phone-key { width: 52px; height: 52px; border-radius: 50%; font-size: 20px; cursor: pointer; color: #e8e2ff;
+  background: linear-gradient(160deg, #20202a, #0c0c12);
+  border: 1px solid rgba(124,58,237,.5);
+  box-shadow: 0 6px 16px -6px rgba(0,0,0,.8), inset 0 1px 2px rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center; transition: .12s; }
+.phone-key:hover:not(:disabled) { border-color: #22d3ee; box-shadow: 0 0 16px rgba(34,211,238,.4); }
+.phone-key:active:not(:disabled) { transform: scale(.93); }
+.phone-key:disabled { opacity: .35; cursor: default; }
+.phone-key-rand { background: linear-gradient(135deg, var(--lila), #22d3ee); color: #fff; border: none; }
+.phone-key-home { font-size: 22px; }
+
+/* Inhalt (wie vorher, nur leicht an Screen angepasst) */
 .pokedex-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .pokedex-title { font-family: 'Pokemon Solid','Plus Jakarta Sans',sans-serif; font-weight: 400;
-  font-size: clamp(30px,6vw,52px); margin: 0; color: #ffde00;
+  font-size: clamp(28px,7vw,44px); margin: 0; color: #ffde00;
   -webkit-text-stroke: 2px #3b4cca;
   text-shadow: 0 1px 0 #2a3694,0 2px 0 #28328a,0 3px 0 #222d80,0 4px 0 #1e296f,0 5px 0 #1c2462,0 6px 6px rgba(0,0,0,.5); }
-.pokedex-sub { margin: 4px 0 0; color: #b9aee0; font-size: 13px; letter-spacing: .04em; }
-.dex-rand { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: #fff;
-  background: linear-gradient(135deg,var(--lila),#22d3ee); border: none; border-radius: 12px;
-  padding: 10px 16px; cursor: pointer; box-shadow: 0 8px 24px -8px rgba(34,211,238,.6); }
-.dex-rand:disabled { opacity: .6; cursor: default; }
-.pokedex-controls { margin: 20px 0 24px; display: flex; flex-direction: column; gap: 14px; }
-.dex-search { width: 100%; padding: 14px 18px; font-size: 16px; color: #f4f1fb;
+.pokedex-sub { margin: 4px 0 0; color: #b9aee0; font-size: 12px; letter-spacing: .04em; }
+.pokedex-controls { margin: 16px 0 18px; display: flex; flex-direction: column; gap: 12px; }
+.dex-search { width: 100%; padding: 12px 16px; font-size: 15px; color: #f4f1fb;
   background: rgba(7,7,13,.6); border: 1px solid rgba(124,58,237,.5); border-radius: 14px; outline: none; }
 .dex-search:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34,211,238,.2); }
 .dex-search::placeholder { color: #8a7fb5; }
-.dex-types { display: flex; flex-wrap: wrap; gap: 8px; }
-.dex-type { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: capitalize;
+.dex-types { display: flex; flex-wrap: wrap; gap: 6px; }
+.dex-type { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: capitalize;
   color: #fff; border: 1px solid var(--tc); background: color-mix(in srgb, var(--tc) 22%, transparent);
-  border-radius: 999px; padding: 6px 12px; cursor: pointer; opacity: .8; transition: .15s; }
+  border-radius: 999px; padding: 5px 10px; cursor: pointer; opacity: .8; transition: .15s; }
 .dex-type:hover { opacity: 1; }
-.dex-type.is-on { background: var(--tc); color: #08080f; opacity: 1; box-shadow: 0 0 14px var(--tc); }
-.dex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 12px; }
-.dex-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 6px;
-  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
+.dex-type.is-on { background: var(--tc); color: #08080f; opacity: 1; box-shadow: 0 0 12px var(--tc); }
+.dex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px,1fr)); gap: 10px; }
+.dex-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 12px;
   cursor: pointer; color: #f4f1fb; transition: .15s; }
 .dex-cell:hover { background: rgba(124,58,237,.2); border-color: rgba(34,211,238,.5); }
-.dex-sprite { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
-.dex-id { font-size: 11px; color: #9d92c4; }
-.dex-name { font-size: 13px; font-weight: 700; letter-spacing: .02em; text-transform: capitalize; }
-.dex-pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 22px; }
-.dex-empty { text-align: center; color: #b9aee0; padding: 40px 10px; font-size: 15px; }
+.dex-sprite { width: 60px; height: 60px; object-fit: contain; image-rendering: pixelated; }
+.dex-id { font-size: 10px; color: #9d92c4; }
+.dex-name { font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: capitalize; }
+.dex-pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 18px; }
+.dex-empty { text-align: center; color: #b9aee0; padding: 40px 10px; font-size: 14px; }
 .dex-try { display: inline-block; margin-left: 8px; background: none; border: 1px solid #3a2a5e;
   color: #cbb9ff; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
-/* Detail-Modal */
+/* Detail-Modal (als Screen-Overlay) */
 .deck-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(4,4,9,.8);
   backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 18px; }
-.deck-modal { position: relative; width: 100%; max-width: 460px; max-height: 90vh; overflow: auto;
+.deck-modal { position: relative; width: 100%; max-width: 420px; max-height: 86vh; overflow: auto;
   background: linear-gradient(165deg, rgba(28,16,56,.96), rgba(14,7,32,.98));
-  border: 1px solid rgba(34,211,238,.5); border-radius: 22px; padding: 26px 22px;
+  border: 1px solid rgba(34,211,238,.5); border-radius: 26px; padding: 24px 20px;
   box-shadow: 0 30px 90px -16px rgba(0,0,0,.85), inset 0 0 40px rgba(109,40,217,.16); }
 .deck-x { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%;
   background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #fff; cursor: pointer; font-size: 15px; }
 .deck-nav { position: absolute; top: 12px; left: 12px; display: flex; gap: 8px; }
 .deck-sprite-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 10px 0 4px; }
-.deck-sprite { width: 150px; height: 150px; object-fit: contain; image-rendering: pixelated;
+.deck-sprite { width: 140px; height: 140px; object-fit: contain; image-rendering: pixelated;
   filter: drop-shadow(0 0 16px rgba(34,211,238,.4)); }
 .deck-shiny-btn { font-size: 12px; font-weight: 700; color: #cbb9ff; background: rgba(124,58,237,.25);
   border: 1px solid rgba(124,58,237,.5); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
-.deck-name { text-align: center; font-size: 26px; font-weight: 800; text-transform: capitalize; color: #fff; margin-top: 6px; }
+.deck-name { text-align: center; font-size: 24px; font-weight: 800; text-transform: capitalize; color: #fff; margin-top: 6px; }
 .deck-id { color: #9d92c4; font-weight: 600; margin-right: 8px; font-size: 18px; }
 .deck-types { display: flex; gap: 8px; justify-content: center; margin: 10px 0 16px; }
 .deck-type { font-size: 12px; font-weight: 700; letter-spacing: .04em; color: #08080f;

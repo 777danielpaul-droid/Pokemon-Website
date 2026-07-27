@@ -129,84 +129,94 @@ export default function Pokedex() {
 
   return (
     <section id="pokedex" className="pokedex-section" aria-label="Pokedex">
-      <div className="pokedex-card">
-        <header className="pokedex-head">
-          <div>
-            <h2 className="pokedex-title">PoKeDeX</h2>
-            <p className="pokedex-sub">
-              {list ? `${list.length} Pokémon · Suche, filtern, entdecken` : 'Lade Pokémon…'}
-            </p>
-          </div>
-          <button className="dex-rand" onClick={randomPokemon} disabled={randomBusy}>
-            🎲 Zufall
-          </button>
-        </header>
+      <div className="phone">
+        <div className="phone-frame">
+          <div className="phone-notch" aria-hidden="true"><span className="phone-cam" /></div>
+          <div className="phone-screen">
+            <header className="pokedex-head">
+              <div>
+                <h2 className="pokedex-title">PoKeDeX</h2>
+                <p className="pokedex-sub">
+                  {list ? `${list.length} Pokémon · Suche, filtern, entdecken` : 'Lade Pokémon…'}
+                </p>
+              </div>
+            </header>
 
-        {/* Suche + Typ-Chips */}
-        <div className="pokedex-controls">
-          <input
-            className="dex-search"
-            type="search"
-            placeholder="Pokémon suchen… (z.B. ditto)"
-            value={query}
-            onChange={onSearch}
-            onKeyDown={onSearchKey}
-            aria-label="Pokémon suchen"
-          />
-          <div className="dex-types">
-            {Object.keys(TYPE_COLORS).map((t) => (
-              <button
-                key={t}
-                className={`dex-type ${typeFilter === t ? 'is-on' : ''}`}
-                style={{ '--tc': typeColor(t) }}
-                onClick={() => toggleType(t)}
-              >{t}</button>
-            ))}
+            {/* Suche + Typ-Chips */}
+            <div className="pokedex-controls">
+              <input
+                className="dex-search"
+                type="search"
+                placeholder="Pokémon suchen… (z.B. ditto)"
+                value={query}
+                onChange={onSearch}
+                onKeyDown={onSearchKey}
+                aria-label="Pokémon suchen"
+              />
+              <div className="dex-types">
+                {Object.keys(TYPE_COLORS).map((t) => (
+                  <button
+                    key={t}
+                    className={`dex-type ${typeFilter === t ? 'is-on' : ''}`}
+                    style={{ '--tc': typeColor(t) }}
+                    onClick={() => toggleType(t)}
+                  >{t}</button>
+                ))}
+              </div>
+            </div>
+
+            {/* Grid */}
+            {!list ? (
+              <div className="dex-empty">⏳ PokeAPI wird geladen…</div>
+            ) : filtered.length === 0 ? (
+              <div className="dex-empty">
+                Kein Treffer für „{query}“.
+                <button className="dex-try" onClick={() => loadDetail(query)}>Trotzdem „{query}“ suchen?</button>
+              </div>
+            ) : (
+              <>
+                <motion.div className="dex-grid" initial="hidden" animate="show"
+                  variants={{ show: { transition: { staggerChildren: 0.015 } } }}>
+                  {pageItems.map((p) => {
+                    const id = p.url.split('/').slice(-2, -1)[0]
+                    return (
+                      <motion.button
+                        key={p.name}
+                        className="dex-cell"
+                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                        onClick={() => loadDetail(p.name)}
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <img className="dex-sprite" src={`${SPRITE_BASE}/${id}.png`} alt={p.name}
+                          loading="lazy" onError={(e) => { e.target.style.visibility = 'hidden' }} />
+                        <div className="dex-id">#{String(id).padStart(3, '0')}</div>
+                        <div className="dex-name">{p.name}</div>
+                      </motion.button>
+                    )
+                  })}
+                </motion.div>
+
+                {/* Pagination (im Screen) */}
+                <div className="dex-pager">
+                  <button className="ctl" disabled={page === 0} onClick={() => setPage((p) => Math.max(0, p - 1))}>‹</button>
+                  <span className="hint">{page + 1} / {pageCount}</span>
+                  <button className="ctl" disabled={page >= pageCount - 1} onClick={() => setPage((p) => p + 1)}>›</button>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Hardware-Keys unter dem Screen (Touch-Buttons) */}
+          <div className="phone-keys">
+            <button className="phone-key phone-key-nav" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} aria-label="Seite zurück">‹</button>
+            <button className="phone-key phone-key-rand" onClick={randomPokemon} disabled={randomBusy} aria-label="Zufall">🎲</button>
+            <button className="phone-key phone-key-home" onClick={() => setDetail(null)} aria-label="Zurück/Schließen">⌂</button>
+            <button className="phone-key phone-key-nav" onClick={() => setPage((p) => p + 1)} disabled={page >= pageCount - 1} aria-label="Seite vor">›</button>
           </div>
         </div>
-
-        {/* Grid */}
-        {!list ? (
-          <div className="dex-empty">⏳ PokeAPI wird geladen…</div>
-        ) : filtered.length === 0 ? (
-          <div className="dex-empty">
-            Kein Treffer für „{query}“.
-            <button className="dex-try" onClick={() => loadDetail(query)}>Trotzdem „{query}“ suchen?</button>
-          </div>
-        ) : (
-          <>
-            <motion.div className="dex-grid" initial="hidden" animate="show"
-              variants={{ show: { transition: { staggerChildren: 0.015 } } }}>
-              {pageItems.map((p) => {
-                const id = p.url.split('/').slice(-2, -1)[0]
-                return (
-                  <motion.button
-                    key={p.name}
-                    className="dex-cell"
-                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                    onClick={() => loadDetail(p.name)}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <img className="dex-sprite" src={`${SPRITE_BASE}/${id}.png`} alt={p.name}
-                      loading="lazy" onError={(e) => { e.target.style.visibility = 'hidden' }} />
-                    <div className="dex-id">#{String(id).padStart(3, '0')}</div>
-                    <div className="dex-name">{p.name}</div>
-                  </motion.button>
-                )
-              })}
-            </motion.div>
-
-            {/* Pagination */}
-            <div className="dex-pager">
-              <button className="ctl" disabled={page === 0} onClick={() => setPage((p) => Math.max(0, p - 1))}>‹</button>
-              <span className="hint">{page + 1} / {pageCount}</span>
-              <button className="ctl" disabled={page >= pageCount - 1} onClick={() => setPage((p) => p + 1)}>›</button>
-            </div>
-          </>
-        )}
       </div>
 
-      {/* --- Detail-Modal --- */}
+      {/* --- Detail-Modal (im Screen-Look) --- */}
       <AnimatePresence>
         {detail && (
           <motion.div className="deck-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
