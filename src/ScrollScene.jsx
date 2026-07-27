@@ -123,6 +123,7 @@ export default function ScrollScene() {
   return (
     <section id="story" ref={sectionRef} className="story-section" aria-label="Animation">
       <canvas ref={canvasRef} className="story-canvas" aria-hidden="true" />
+      <div className="story-dim" aria-hidden="true" />
     </section>
   )
 }
