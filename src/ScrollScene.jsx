@@ -76,6 +76,13 @@ export default function ScrollScene() {
     }
 
     // Eigener scroll-Listener: progress aus Section-Rect
+    const BADGES = [
+      { label: 'TCG', from: 0.18, to: 0.30 },
+      { label: 'Games', from: 0.43, to: 0.55 },
+      { label: 'Series', from: 0.68, to: 0.80 },
+      { label: 'More', from: 0.90, to: 0.99 },
+    ]
+    const badgeEls = [...document.querySelectorAll('.story-badge')]
     const onScroll = () => {
       if (rafPending.current) return
       rafPending.current = true
@@ -90,6 +97,13 @@ export default function ScrollScene() {
         const fp = p <= HOLD ? 0 : (p - HOLD) / (1 - HOLD)
         lastIdx.current = fp * (FRAMES - 1)
         drawFrame(lastIdx.current)
+        // Badges: sichtbar nur im jeweiligen Fenster
+        BADGES.forEach((b, i) => {
+          const el = badgeEls[i]
+          if (!el) return
+          const on = p >= b.from && p <= b.to
+          el.classList.toggle('is-on', on)
+        })
       })
     }
 
@@ -127,6 +141,12 @@ export default function ScrollScene() {
     <section id="story" ref={sectionRef} className="story-section" aria-label="Animation">
       <canvas ref={canvasRef} className="story-canvas" aria-hidden="true" />
       <div className="story-dim" aria-hidden="true" />
+      <div className="story-badges" aria-hidden="true">
+        <div className="story-badge"><img src="/anim/pokeball.webp" alt="" /><span>1. TCG</span></div>
+        <div className="story-badge"><img src="/anim/pokeball.webp" alt="" /><span>2. Games</span></div>
+        <div className="story-badge"><img src="/anim/pokeball.webp" alt="" /><span>3. Series</span></div>
+        <div className="story-badge"><img src="/anim/pokeball.webp" alt="" /><span>4. More</span></div>
+      </div>
     </section>
   )
 }
