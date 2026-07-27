@@ -77,10 +77,10 @@ export default function ScrollScene() {
 
     // Eigener scroll-Listener: progress aus Section-Rect
     const BADGES = [
-      { label: 'TCG', from: 0.18, to: 0.30 },
-      { label: 'Games', from: 0.43, to: 0.55 },
-      { label: 'Series', from: 0.68, to: 0.80 },
-      { label: 'More', from: 0.90, to: 0.99 },
+      { label: 'TCG', from: 0.10, to: 0.30 },
+      { label: 'Games', from: 0.32, to: 0.52 },
+      { label: 'Series', from: 0.54, to: 0.74 },
+      { label: 'More', from: 0.76, to: 0.96 },
     ]
     const badgeEls = [...document.querySelectorAll('.story-badge')]
     const onScroll = () => {
