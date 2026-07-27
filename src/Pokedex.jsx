@@ -214,7 +214,7 @@ export default function Pokedex() {
           <div className="phone-keys">
             <button className="phone-key phone-key-nav" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} aria-label="Seite zurück">‹</button>
             <button className="phone-key phone-key-rand" onClick={randomPokemon} disabled={randomBusy} aria-label="Zufall">🎲</button>
-            <button className="phone-key phone-key-home" onClick={() => setDetail(null)} aria-label="Zurück/Schließen">⌂</button>
+            <button className="phone-key phone-key-home" onClick={() => { setDetail(null); if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label="Zum Seitenanfang">⌂</button>
             <button className="phone-key phone-key-nav" onClick={() => setPage((p) => p + 1)} disabled={page >= pageCount - 1} aria-label="Seite vor">›</button>
           </div>
         </div>

@@ -188,9 +188,14 @@ export default function App() {
       {/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite, sticky, auto-hide) ---------- */}
       <header className={`glass-header${headerHidden ? ' is-hidden' : ''}`}>
         <div className="gh-glow" aria-hidden="true" />
-        <a className="gh-brand" href="https://www.pokemon.com/de" target="_blank" rel="noreferrer">
+        <button
+          type="button"
+          className="gh-brand"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Zum Seitenanfang"
+        >
           <span className="gh-dot" />Pokémon
-        </a>
+        </button>
         <nav className="gh-nav" aria-label="Hauptnavigation">
           <a href="https://www.pokemon.com/de/pokedex/" target="_blank" rel="noreferrer">Pokédex</a>
           <a href="https://www.pokemon.com/de/news" target="_blank" rel="noreferrer">News</a>
