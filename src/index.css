@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --lila: #6d28d9; --bordeaux: #7b1e2b; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+#root { margin: 0; min-height: 100%; }
+
+/* ---------- HERO-BILD (pikanfriends) als gedimmter, bunter Hintergrund ----------
+   Wichtig: z-index 0 (nicht negativ!) + .stage z-index 1 -> Layer liegen
+   ZUVERLAESSIG hinter dem Inhalt, unabhaengig von #root-Stacking-Context. */
+.hero-img { position: fixed; inset: 0; z-index: 0;
+  background: url('/pikanfriends.webp') center / cover no-repeat;
+  filter: blur(4px) brightness(.7) saturate(1.3); transform: scale(1.07); }
+.hero-dim { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(135% 105% at 50% -10%, rgba(20,14,34,.15), rgba(6,6,14,.66) 58%, rgba(4,4,9,.85) 100%); }
+
+/* ---------- BUNTER HOLO HINTERGRUND (dunkel/edel, transparent -> Bild scheint durch) ---------- */
+.holo-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: transparent; }
+.blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55;
+  mix-blend-mode: screen; will-change: transform; }
+.blob.b1 { width:46vmax; height:46vmax; left:-10vmax; top:-8vmax;
+  background: radial-gradient(circle,#6d28d9,transparent 65%); animation: drift1 26s ease-in-out infinite; }
+.blob.b2 { width:40vmax; height:40vmax; right:-12vmax; top:10vmax;
+  background: radial-gradient(circle,#7b1e2b,transparent 65%); animation: drift2 32s ease-in-out infinite; }
+.blob.b3 { width:38vmax; height:38vmax; left:20vmax; bottom:-14vmax;
+  background: radial-gradient(circle,#1d4ed8,transparent 65%); animation: drift3 30s ease-in-out infinite; }
+.blob.b4 { width:30vmax; height:30vmax; right:6vmax; bottom:-8vmax;
+  background: radial-gradient(circle,#b45309,transparent 65%); animation: drift1 38s ease-in-out infinite reverse; }
+.blob.b5 { width:26vmax; height:26vmax; left:35vw; top:30vh;
+  background: radial-gradient(circle,#0d9488,transparent 65%); animation: drift2 34s ease-in-out infinite; }
+.blob.b6 { width:34vmax; height:34vmax; left:8vw; top:42vh;
+  background: radial-gradient(circle,#db2777,transparent 65%); animation: drift3 28s ease-in-out infinite reverse; }
+.blob.b7 { width:30vmax; height:30vmax; right:14vw; bottom:6vh;
+  background: radial-gradient(circle,#06b6d4,transparent 65%); animation: drift1 36s ease-in-out infinite; }
+
+.holo-sheen { position: fixed; inset: -60%; z-index: 0;
+  background: conic-gradient(from 0deg,
+    rgba(109,40,217,.30),rgba(219,39,119,.26),rgba(123,30,43,.24),rgba(37,99,235,.28),
+    rgba(217,119,6,.22),rgba(13,148,136,.26),rgba(6,182,212,.24),rgba(109,40,217,.30));
+  filter: blur(46px); mix-blend-mode: screen; opacity: .6;
+  animation: spin 44s linear infinite; will-change: transform; }
+.holo-grain { position: fixed; inset: 0; z-index: 0; opacity: .07; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* ---------- MAXIMALER GLITZER (CSS-only, GPU-composited: nur transform+opacity) ---------- */
+.holo-glitter, .holo-glitter2 { position: fixed; inset: -25%; z-index: 0; pointer-events: none;
+  background-repeat: repeat; mix-blend-mode: screen; will-change: transform, opacity; }
+.holo-glitter { background-image:
+    radial-gradient(circle, rgba(255,255,255,.95) 0.6px, transparent 1.4px),
+    radial-gradient(circle, rgba(196,181,253,.9) 0.6px, transparent 1.4px);
+  background-size: 80px 80px, 120px 120px; background-position: 0 0, 40px 60px;
+  animation: glitterA 14s ease-in-out infinite, floatA 60s linear infinite; }
+.holo-glitter2 { background-image:
+    radial-gradient(circle, rgba(252,211,77,.85) 0.6px, transparent 1.4px),
+    radial-gradient(circle, rgba(125,211,252,.85) 0.6px, transparent 1.4px);
+  background-size: 100px 100px, 150px 150px; background-position: 20px 30px, 70px 90px;
+  animation: glitterB 11s ease-in-out infinite, floatB 80s linear infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(6vmax,4vmax) scale(1.12)} }
+@keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1.05)} 50%{transform:translate(-5vmax,6vmax) scale(.92)} }
+@keyframes drift3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(4vmax,-5vmax) scale(1.1)} }
+@keyframes glitterA { 0%,100%{opacity:.6} 50%{opacity:1} }
+@keyframes glitterB { 0%,100%{opacity:.45} 45%{opacity:1} }
+@keyframes floatA { 0%{transform:translate(0,0)} 100%{transform:translate(4%,3%)} }
+@keyframes floatB { 0%{transform:translate(0,0)} 100%{transform:translate(-3%,-4%)} }
+@media (prefers-reduced-motion: reduce) {
+  .blob, .holo-sheen, .holo-glitter, .holo-glitter2 { animation: none; }
+  .holo-glitter, .holo-glitter2 { opacity: .8; }
+}
+
+/* ---------- STAGE / RONDELL (ueber allen Hintergrund-Layern) ---------- */
+.stage { position: relative; z-index: 1; min-height: 100dvh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: clamp(16px,4vw,48px); gap: clamp(18px,3vw,32px); text-align: center; }
+.eyebrow { letter-spacing: .32em; text-transform: uppercase; font-size: clamp(10px,2.6vw,13px);
+  font-weight: 700; color: #b9a7e6; }
+.title { font-size: clamp(26px,7vw,54px); font-weight: 800; line-height: 1.02;
+  background: linear-gradient(92deg,#c4b5fd,#f0abfc 38%,#fca5a5 72%,#fcd34d);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 40px rgba(109,40,217,.25); }
+.subtitle { max-width: 38ch; font-size: clamp(13px,3.4vw,16px); color: #e8e2f6; opacity: .9; }
+.hint { font-size: clamp(11px,2.8vw,13px); color: #b3a9d0; letter-spacing: .04em; }
+
+.ring-wrap { width: min(92vw,560px); touch-action: pan-y; cursor: grab;
+  user-select: none; -webkit-user-select: none; }
+.ring-wrap:active { cursor: grabbing; }
+
+.ring-card { position: absolute; top: 50%; left: 50%; margin-left: 0; border-radius: 18px;
+  overflow: hidden; background: #110e1a; border: 1px solid rgba(196,181,253,.18);
+  box-shadow: 0 8px 30px rgba(0,0,0,.55); will-change: transform; }
+.ring-card .img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.ring-card .scrim { position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,7,13,.92) 4%, rgba(7,7,13,.25) 42%, transparent 70%); }
+.ring-card .label { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 12px 12px;
+  font-size: clamp(11px,2.7vw,14px); font-weight: 700; line-height: 1.15; color: #f3eefe;
+  text-shadow: 0 1px 6px rgba(0,0,0,.8); }
+.ring-card .tag { display: inline-block; font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 800; color: #d8c7ff; margin-bottom: 5px; padding: 2px 7px; border-radius: 999px;
+  background: rgba(109,40,217,.35); border: 1px solid rgba(196,181,253,.4); }
+.ring-core { position: absolute; top: 50%; left: 50%; width: 26%; height: 26%;
+  transform: translate(-50%,-50%); border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, rgba(124,58,237,.55), rgba(123,30,43,.25) 60%, transparent 72%);
+  filter: blur(8px); pointer-events: none; }
+
+/* Hover = Lila-Glow + matter */
+.ring-card.is-hover { border-color: rgba(167,139,250,.85);
+  box-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(167,139,250,.5),
+    0 0 34px rgba(109,40,217,.55), 0 0 60px rgba(123,30,43,.25); }
+
+.ctl { width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(196,181,253,.35);
+  background: rgba(109,40,217,.18); color: #e9e1ff; font-size: 22px; line-height: 1;
+  cursor: pointer; backdrop-filter: blur(6px); transition: background .18s ease, transform .18s ease; }
+.ctl:hover { background: rgba(109,40,217,.38); }
+.ctl:active { transform: scale(.92); }
