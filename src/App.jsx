@@ -116,7 +116,9 @@ export default function App() {
         if (d < bestDiff) { bestDiff = d; best = i }
       }
       setActive(best)
-      seen.current.add(best)
+      // nur als "gesehen" zählen, wenn wirklich an der Front zur Ruhe gekommen
+      // (nicht bei jedem Zwischen-Frame beim Drag/wheel-Schwenken)
+      if (bestDiff < step * 0.5 && !drag.on) seen.current.add(best)
     })
     return unsub
   }, [n, rot, step])
