@@ -230,14 +230,14 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
 .story-section { position: relative; width: 100%; min-height: 600vh; z-index: 1; pointer-events: none; }
 .story-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block;
   z-index: 1; opacity: 0; pointer-events: none;
-  transition: opacity .35s ease, filter .35s ease, transform .35s ease;
+  transition: opacity .85s ease, filter .85s ease, transform .85s ease;
   /* gleicher "hintergründiger" Look wie .hero-img: weich, gedimmt, saturiert, leicht gezoomt */
   filter: blur(2px) brightness(.7) saturate(1.3); transform: scale(1.07); }
 .story-canvas.is-active { opacity: 1; }
 /* Vignette wie .hero-dim -> dimmt die Anim-Szene zusätzlich ab (mehr hintergründig) */
 .story-dim { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
-  transition: opacity .35s ease;
-  background: radial-gradient(135% 105% at 50% -10%, rgba(20,14,34,.15), rgba(6,6,14,.66) 58%, rgba(4,4,9,.85) 100%); }
+  transition: opacity .85s ease-in-out;
+  background: radial-gradient(135% 105% at 50% -10%, rgba(20,14,34,.12), rgba(6,6,14,.5) 58%, rgba(4,4,9,.72) 100%); }
 .story-canvas.is-active ~ .story-dim { opacity: 1; }
 .ctl:active { transform: scale(.92); }
 

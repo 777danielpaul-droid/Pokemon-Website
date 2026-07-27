@@ -63,16 +63,15 @@ export default function ScrollScene() {
 
     img.onload = () => { loadedRef.current = true; resize() }
 
-    // Canvas sichtbar schalten: erst wenn Hero komplett weg ist (section.top <= 0),
-    // sonst deckt die Animation den Hero nicht ab. Deterministisch via scroll-Listener.
+    // Canvas sichtbar schalten: weiches Crossfade mit dem wegrollenden Hero.
+    // Schon bei ~55% Scroll (Hero noch teils sichtbar) einblenden, erst bei
+    // ~45% Rest beim Raus-Scrollen (Pokedex-Ende) wieder aus -> kein harter Schnitt.
     const updateActive = () => {
       const sec = sectionRef.current
       if (!sec) return
       const r = sec.getBoundingClientRect()
-      // Canvas NUR sichtbar, solange die Story-Sektion im Viewport ist
-      // (top<=0 = Hero weg, bottom>=1 = noch nicht ganz durchgescrollt).
-      // Danach aus -> verdeckt z.B. den Pokedex am Seitenende nicht.
-      const visible = r.top <= 1 && r.bottom >= 1
+      const vh = window.innerHeight || 1
+      const visible = r.top <= vh * 0.55 && r.bottom >= vh * 0.45
       canvas.classList.toggle('is-active', visible)
     }
 
