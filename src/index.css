@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+@import url('https://fonts.cdnfonts.com/css/pokemon-solid');
 
 @tailwind base;
 @tailwind components;
@@ -114,10 +115,14 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   justify-content: center; padding: clamp(16px,4vw,48px); gap: clamp(18px,3vw,32px); text-align: center; }
 .eyebrow { letter-spacing: .32em; text-transform: uppercase; font-size: clamp(10px,2.6vw,13px);
   font-weight: 700; color: #b9a7e6; }
-.title { font-size: clamp(26px,7vw,54px); font-weight: 800; line-height: 1.02;
-  background: linear-gradient(92deg,#c4b5fd,#f0abfc 38%,#fca5a5 72%,#fcd34d);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  text-shadow: 0 0 40px rgba(109,40,217,.25); }
+.hero-pokemon { font-family: 'Pokemon Solid', 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(40px,11vw,86px); font-weight: 400; line-height: .95; margin: 0;
+  color: #ffde00; /* Pokemon-Gelb */
+  -webkit-text-stroke: clamp(2px,.6vw,4px) #3b4cca; /* Logo-Blau Outline */
+  paint-order: stroke fill; text-shadow: 0 4px 0 rgba(59,76,202,.55), 0 0 30px rgba(255,222,0,.25); }
+.hero-news { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+  font-size: clamp(18px,4.5vw,30px); letter-spacing: .14em; text-transform: uppercase;
+  color: #e8e2f6; margin-top: 4px; text-shadow: 0 0 22px rgba(109,40,217,.4); }
 .subtitle { max-width: 38ch; font-size: clamp(13px,3.4vw,16px); color: #e8e2f6; opacity: .9; }
 .hint { font-size: clamp(11px,2.8vw,13px); color: #b3a9d0; letter-spacing: .04em; }
 

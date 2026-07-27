@@ -115,8 +115,8 @@ export default function App() {
 
       <main className="stage">
         <div className="hero-head">
-          <div className="eyebrow">Pokémon.de · Rondell</div>
-          <h1 className="title">Infos im Kreis</h1>
+          <h1 className="hero-pokemon">Pokemon</h1>
+          <div className="hero-news">News</div>
         </div>
         <p className="subtitle">
           Alle News, Games &amp; Events – gleich groß, im Rondell. Ziehen oder scrollen
