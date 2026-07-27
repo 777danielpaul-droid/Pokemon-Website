@@ -9,7 +9,8 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; max-width: 100%; }
 #root { margin: 0; min-height: 100%; }
 
 /* ---------- HERO-BILD (pikanfriends) als gedimmter, bunter Hintergrund ----------
@@ -85,7 +86,7 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   border: none; border-bottom: 2px solid #7FD4E8;
   box-shadow: 0 0 26px rgba(127,212,232,.55), 0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
   overflow: visible; isolation: isolate; }
-.glass-header .gh-glow { position: absolute; inset: -60% -8% -90% -8%; z-index: -1;
+.glass-header .gh-glow { position: absolute; inset: -60% 0 -90% 0; z-index: -1;
   background: radial-gradient(75% 110% at 22% 8%, rgba(224,247,255,.92), rgba(186,230,253,.70) 38%, transparent 70%);
   filter: blur(42px); pointer-events: none; transform-origin: 50% 0%;
   animation: ghPulse 3.2s ease-in-out infinite; will-change: opacity, transform; }

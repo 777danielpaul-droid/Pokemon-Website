@@ -115,11 +115,11 @@ export default function App() {
 
       <main className="stage">
         <div className="hero-head">
-          <h1 className="hero-pokemon">Pokemon</h1>
+          <h1 className="hero-pokemon">PoKeMoN</h1>
           <div className="hero-news">News</div>
         </div>
         <p className="subtitle">
-          Alle News, Games &amp; Events – gleich groß, im Rondell. Ziehen oder scrollen
+          Alle News, Games &amp; Events – Ziehen oder scrollen
           zum Drehen, tippe eine Karte für Details.
         </p>
 
