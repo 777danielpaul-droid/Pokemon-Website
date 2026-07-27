@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { motion, useSpring, animate, useTransform } from 'framer-motion'
-import { cards } from './data.js'
+import { cards, booster } from './data.js'
 import Starfield from './Starfield.jsx'
 import ScrollScene from './ScrollScene.jsx'
+import BoosterModal from './BoosterModal.jsx'
 
 const DEG = Math.PI / 180
 
@@ -28,7 +29,14 @@ function useSize(ref) {
 }
 
 export default function App() {
-  const n = cards.length
+  // Rondell-Items: News-Karten + 1 Booster an ZUFÄLLIGER Position (pro Load einmalig)
+  const items = useMemo(() => {
+    const arr = [...cards]
+    const pos = 1 + Math.floor(Math.random() * cards.length) // 1..n (nicht ganz vorne)
+    arr.splice(pos, 0, booster)
+    return arr
+  }, [])
+  const n = items.length
   const wrapRef = useRef(null)
   const ringHover = useRef(false)
   const seen = useRef(new Set())
@@ -36,6 +44,7 @@ export default function App() {
   const [active, setActive] = useState(0)
   const [hovered, setHovered] = useState(null)
   const [headerHidden, setHeaderHidden] = useState(false)
+  const [boosterOpen, setBoosterOpen] = useState(false)
 
   // Auto-Hide-Header: runter scrollen/wheel -> einrollen, hoch -> ausrollen
   useEffect(() => {
@@ -68,11 +77,17 @@ export default function App() {
     window.addEventListener('wheel', onWheel, { passive: true })
     window.addEventListener('touchstart', onTouch, { passive: true })
     window.addEventListener('touchmove', onTouch, { passive: true })
+    // Immer zurückdrehen: zurück im Rondell/Hero -> seen leeren -> Pin + Drehen wieder frei
+    const onScrollReset = () => {
+      if (window.scrollY < window.innerHeight) seen.current.clear()
+    }
+    window.addEventListener('scroll', onScrollReset, { passive: true })
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('wheel', onWheel)
       window.removeEventListener('touchstart', onTouch)
       window.removeEventListener('touchmove', onTouch)
+      window.removeEventListener('scroll', onScrollReset)
     }
   }, [])
 
@@ -207,10 +222,10 @@ export default function App() {
             onPointerLeave={(e) => { endDrag(); onRingLeave(); }}
             onPointerCancel={endDrag}
           >
-            {cards.map((c, i) => (
-              <CardItem key={c.href} card={c} index={i} step={step} rot={rot}
+            {items.map((c, i) => (
+              <CardItem key={(c.booster ? 'booster' : c.href)} card={c} index={i} step={step} rot={rot}
                 Rx={Rx} Ry={Ry} offY={offY} cardW={cardW} cardH={cardH} hovered={hovered} setHovered={setHovered}
-                active={active} setActive={setActive} />
+                active={active} setActive={setActive} onBooster={() => setBoosterOpen(true)} />
             ))}
             <div className="ring-core" />
         </div>
@@ -229,22 +244,23 @@ export default function App() {
 
       {/* ---------- Scroll-getriebene Anim-Szene: Frame 0 unter Hero, Scroll startet Sequenz ---------- */}
       <ScrollScene />
+
+      {/* ---------- Booster Open Modal ---------- */}
+      {boosterOpen && <BoosterModal onClose={() => setBoosterOpen(false)} />}
     </>
   )
 }
 
-function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered, setHovered, active, setActive }) {
+function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered, setHovered, active, setActive, onBooster }) {
   const isHover = hovered === index
   const isFront = active === index
+  const isBooster = !!card.booster
+
   const tf = useTransform(rot, (r) => {
     const a = index * step + r
     const front = Math.cos(a * DEG)
     const depth = (front + 1) / 2
-    // Scale weniger steil -> hintere Karten groesser/sichtbarer (naeher vorn),
-    // Opacity bleibt steil -> bleiben gedimmt, nicht zu dominant. Hoehe (Ry) unveraendert.
     const s = (0.45 + 0.55 * Math.pow(depth, 1.7)) * (isHover ? 1.14 : 1)
-    // ELLIPSE: x seitlich (Rx), y vertikal (Ry) -> Ring gestaucht,
-    // hintere Karten rutschen weiter runter. a=0 -> unten-mittig (Front).
     const x = Rx * Math.sin(a * DEG)
     const y = Ry * Math.cos(a * DEG)
     return `translate(-50%,-50%) translate(${x}px, ${y + offY}px) scale(${s})`
@@ -259,9 +275,34 @@ function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered,
     const a = index * step + r
     return Math.round(100 + Math.cos(a * DEG) * 60)
   })
+
+  // BOOSTER-PACK (eigenständiger Kartentyp): lila Pack, "POKEMON" drauf
+  if (isBooster) {
+    return (
+      <motion.button type="button" aria-label="Booster öffnen"
+        className={`ring-card booster-card ${isHover ? 'is-hover' : ''}${isFront ? 'is-front' : ''}`}
+        style={{ width: cardW, height: cardH, transform: tf, opacity: op, zIndex: z, cursor: 'pointer' }}
+        onPointerDown={(e) => e.stopPropagation()}
+        onHoverStart={() => setHovered(index)}
+        onHoverEnd={() => setHovered((h) => (h === index ? null : h))}
+        onClick={(e) => { e.preventDefault(); setHovered(index); setActive(index); onBooster?.() }}
+        draggable={false}>
+        <div className="booster-body">
+          <div className="booster-top" />
+          <div className="booster-foil" />
+          <div className="booster-logo">
+            <div className="big">POKEMON</div>
+            <div className="sub">BOOSTER</div>
+          </div>
+          <div className="booster-perf" />
+        </div>
+      </motion.button>
+    )
+  }
+
   return (
     <motion.a href={card.href} target="_blank" rel="noreferrer"
-      className={`ring-card ${isHover ? 'is-hover' : ''}${isFront ? ' is-front' : ''}`}
+      className={`ring-card ${isHover ? 'is-hover' : ''}${isFront ? 'is-front' : ''}`}
       style={{ width: cardW, height: cardH, transform: tf, opacity: op, zIndex: z, cursor: 'pointer' }}
       onHoverStart={() => setHovered(index)}
       onHoverEnd={() => setHovered((h) => (h === index ? null : h))}

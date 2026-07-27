@@ -61,3 +61,6 @@ export const cards = [
     "img": "https://www.pokemon.com/static-assets/content-assets/cms2-de-de/img/trading-card-game/_tiles/me/me05/tcgl/battle-pass/deck-strategy/me05-tcgl-169-de.png"
   }
 ];
+
+// Booster-Pack: wird an zufälliger Position ins Rondell gemischt (siehe App.jsx)
+export const booster = { booster: true, title: 'BOOSTER' };
