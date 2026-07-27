@@ -118,10 +118,13 @@ export default function App() {
   // Rondell-Geometrie als flacher SEITEN-FÄCHER (Ellipse mit Rx >> Ry):
   // Karten bleiben seitlich gefächert, aber vertikal gestaucht -> platzsparend,
   // kein Kreis/Draufsicht. Hintere Karten durch steile Tiefenkurve hinter Front verdeckt.
-  const Rx = W * 0.46          // horizontale Spreizung (seitlich, Fächer)
-  const Ry = W * 0.15          // vertikaler Radius (noch flacher -> hintere Karten rücken weiter nach unten, werden von vorderen verdeckt)
-  const cardW = W * 0.36
-  const cardH = W * 0.50
+  // Ring-Größe gedeckelt: misst .ring-wrap-Breite, aber nie groesser als 520px
+  // -> auf Desktop kompakt, nicht riesig (verhinderte das "Rondell zu weit unten")
+  const Wc = Math.min(W, 460)
+  const Rx = Wc * 0.46         // horizontale Spreizung (seitlich, Fächer)
+  const Ry = Wc * 0.15         // vertikaler Radius (noch flacher -> hintere Karten rücken weiter nach unten, werden von vorderen verdeckt)
+  const cardW = Wc * 0.36
+  const cardH = Wc * 0.50
   const offY = Ry * 0.30       // Ring leicht nach unten -> Nachbarn wirken leicht höher
 
   return (
@@ -164,31 +167,32 @@ export default function App() {
       </button>
 
       <main className="stage">
-        <div className="hero-head">
-          <h1 className="hero-pokemon">PoKeMoN</h1>
-          <div className="hero-news">News</div>
-        </div>
-        <p className="subtitle">
-          Alle News, Games &amp; Events – Ziehen oder scrollen
-          zum Drehen, tippe eine Karte für Details.
-        </p>
+        <div className="stage-inner">
+          <div className="hero-head">
+            <h1 className="hero-pokemon">PoKeMoN</h1>
+            <div className="hero-news">News</div>
+          </div>
+          <p className="subtitle">
+            Alle News, Games &amp; Events – Ziehen oder scrollen
+            zum Drehen, tippe eine Karte für Details.
+          </p>
 
-        <div
-          ref={wrapRef}
-          className="ring-wrap"
-          style={{ height: cardH * 0.7 + Ry * 2 + offY }}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerLeave={endDrag}
-          onPointerCancel={endDrag}
-          onWheel={onWheel}
-        >
-          {cards.map((c, i) => (
-            <CardItem key={c.href} card={c} index={i} step={step} rot={rot}
-              Rx={Rx} Ry={Ry} offY={offY} cardW={cardW} cardH={cardH} hovered={hovered} setHovered={setHovered} />
-          ))}
-          <div className="ring-core" />
+          <div
+            ref={wrapRef}
+            className="ring-wrap"
+            style={{ height: cardH * 0.7 + Ry * 2 + offY }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
+            onPointerCancel={endDrag}
+            onWheel={onWheel}
+          >
+            {cards.map((c, i) => (
+              <CardItem key={c.href} card={c} index={i} step={step} rot={rot}
+                Rx={Rx} Ry={Ry} offY={offY} cardW={cardW} cardH={cardH} hovered={hovered} setHovered={setHovered} />
+            ))}
+            <div className="ring-core" />
         </div>
 
         <div className="flex items-center gap-3">
@@ -196,6 +200,7 @@ export default function App() {
           <span className="hint">{active + 1} / {n} · {categoryOf(cards[active]?.title || '')}</span>
           <button className="ctl" onClick={() => nudge(1)} aria-label="Weiter">›</button>
         </div>
+        </div>{/* /.stage-inner */}
 
         {/* TODO: temporärer Spacer zum Testen des Header-Auto-Hide — später durch echte untere Elemente ersetzen */}
         <div className="scroll-spacer" aria-hidden="true" />
