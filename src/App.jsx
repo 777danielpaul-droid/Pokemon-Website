@@ -118,13 +118,13 @@ export default function App() {
   // Rondell-Geometrie als flacher SEITEN-FÄCHER (Ellipse mit Rx >> Ry):
   // Karten bleiben seitlich gefächert, aber vertikal gestaucht -> platzsparend,
   // kein Kreis/Draufsicht. Hintere Karten durch steile Tiefenkurve hinter Front verdeckt.
-  // Ring-Größe gedeckelt: misst .ring-wrap-Breite, aber nie groesser als 420px
-  // -> kompakt im fixed Hero-Block, Rondell direkt unter dem Hero-Text
-  const Wc = Math.min(W, 420)
+  // Ring-Größe: misst .ring-wrap-Breite (mobile-first: auf Handy = native Breite),
+  // aber gedeckelt auf 680px -> auf Desktop deutlich größere Karten.
+  const Wc = Math.min(W, 680)
   const Rx = Wc * 0.46         // horizontale Spreizung (seitlich, Fächer)
-  const Ry = Wc * 0.14         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
-  const cardW = Wc * 0.34
-  const cardH = Wc * 0.46
+  const Ry = Wc * 0.15         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
+  const cardW = Wc * 0.32
+  const cardH = Wc * 0.44
   const offY = Ry * 0.30       // Ring leicht nach unten -> Nachbarn wirken leicht höher
 
   return (
@@ -173,8 +173,7 @@ export default function App() {
             <div className="hero-news">News</div>
           </div>
           <p className="subtitle">
-            Alle News, Games &amp; Events – Ziehen oder scrollen
-            zum Drehen, tippe eine Karte für Details.
+            Alle News, Games &amp; Events
           </p>
 
           <div
@@ -194,6 +193,8 @@ export default function App() {
             ))}
             <div className="ring-core" />
         </div>
+
+        <p className="ring-hint">Ziehen oder scrollen zum Drehen · tippe eine Karte für Details</p>
 
         <div className="flex items-center gap-3">
           <button className="ctl" onClick={() => nudge(-1)} aria-label="Zurück">‹</button>
