@@ -216,7 +216,7 @@ export default function App() {
             <div className="hero-news">News</div>
           </div>
           <p className="subtitle">
-            Alle News, Games &amp; Events
+            Alle News &amp; Events
           </p>
 
           <div
