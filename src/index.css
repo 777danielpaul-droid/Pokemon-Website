@@ -137,10 +137,20 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   font-size: clamp(40px,11vw,86px); font-weight: 400; line-height: .95; margin: 0;
   color: #ffde00; /* Pokemon-Gelb */
   -webkit-text-stroke: clamp(2px,.6vw,4px) #3b4cca; /* Logo-Blau Outline */
-  paint-order: stroke fill; text-shadow: 0 4px 0 rgba(59,76,202,.55), 0 0 30px rgba(255,222,0,.25); }
-.hero-news { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
-  font-size: clamp(18px,4.5vw,30px); letter-spacing: .14em; text-transform: uppercase;
-  color: #e8e2f6; margin-top: 4px; text-shadow: 0 0 22px rgba(109,40,217,.4); }
+  paint-order: stroke fill;
+  /* blauer 3D-Effekt: gestapelte Schatten bauen ein Relief auf (dunkelblau -> gelb) */
+  text-shadow:
+    0 1px 0 #2a3694,
+    0 2px 0 #28328a,
+    0 3px 0 #253080,
+    0 4px 0 #222c76,
+    0 5px 0 #1f286c,
+    0 6px 0 #1c2462,
+    0 7px 8px rgba(0,0,0,.55),
+    0 0 34px rgba(255,222,0,.25); }
+.stage-inner { position: relative; min-height: 100dvh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: clamp(14px,3vw,28px); padding-top: clamp(92px,12vw,104px); gap: clamp(12px,2.5vw,22px); text-align: center; }
 .subtitle { max-width: 38ch; font-size: clamp(13px,3.4vw,16px); color: #e8e2f6; opacity: .9; }
 .ring-footer { position: absolute; left: 0; right: 0; bottom: clamp(8px,2.5vw,18px);
   display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 300; }

@@ -187,7 +187,7 @@ export default function App() {
       <header className={`glass-header${headerHidden ? ' is-hidden' : ''}`}>
         <div className="gh-glow" aria-hidden="true" />
         <a className="gh-brand" href="https://www.pokemon.com/de" target="_blank" rel="noreferrer">
-          <span className="gh-dot" />Pokémon<span className="gh-brand-dim">.de</span>
+          <span className="gh-dot" />Pokémon
         </a>
         <nav className="gh-nav" aria-label="Hauptnavigation">
           <a href="https://www.pokemon.com/de/pokedex/" target="_blank" rel="noreferrer">Pokédex</a>
