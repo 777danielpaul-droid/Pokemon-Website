@@ -30,6 +30,8 @@ function useSize(ref) {
 export default function App() {
   const n = cards.length
   const wrapRef = useRef(null)
+  const ringHover = useRef(false)
+  const seen = useRef(new Set())
   const { w: W } = useSize(wrapRef)
   const [active, setActive] = useState(0)
   const [hovered, setHovered] = useState(null)
@@ -89,6 +91,7 @@ export default function App() {
         if (d < bestDiff) { bestDiff = d; best = i }
       }
       setActive(best)
+      seen.current.add(best)
     })
     return unsub
   }, [n, rot, step])
@@ -110,6 +113,22 @@ export default function App() {
     animate(rot, snapped, { type: 'spring', stiffness: 120, damping: 20 })
   }
   const onWheel = (e) => { target.current += e.deltaY * 0.18; rot.set(target.current) }
+  const onRingEnter = () => { ringHover.current = true }
+  const onRingLeave = () => { ringHover.current = false }
+  // Desktop wheel-PIN: Cursor am Rondell UND nicht alle n Karten gesehen -> Seite pinnen
+  // (preventDefault) + Ring drehen. Sind alle durch, Scroll freigeben -> Anim-Szene.
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const onWheelNative = (e) => {
+      if (ringHover.current && seen.current.size < n) {
+        e.preventDefault()
+        onWheel(e)
+      }
+    }
+    el.addEventListener('wheel', onWheelNative, { passive: false })
+    return () => el.removeEventListener('wheel', onWheelNative)
+  }, [n, onWheel])
   const nudge = (dir) => {
     // dir=+1 (Weiter) -> Ring dreht so, dass die NÄCHSTE Karte nach vorn kommt (minus!)
     target.current = Math.round(target.current / step) * step - dir * step
@@ -184,9 +203,9 @@ export default function App() {
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={endDrag}
-            onPointerLeave={endDrag}
+            onPointerEnter={onRingEnter}
+            onPointerLeave={(e) => { endDrag(); onRingLeave(); }}
             onPointerCancel={endDrag}
-            onWheel={onWheel}
           >
             {cards.map((c, i) => (
               <CardItem key={c.href} card={c} index={i} step={step} rot={rot}
