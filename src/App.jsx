@@ -121,7 +121,7 @@ export default function App() {
   // Ring-Größe: misst .ring-wrap-Breite (mobile-first: auf Handy = native Breite),
   // aber gedeckelt auf 680px -> auf Desktop deutlich größere Karten.
   const Wc = Math.min(W, 680)
-  const Rx = Wc * 0.46         // horizontale Spreizung (seitlich, Fächer)
+  const Rx = Wc * 0.58         // horizontale Spreizung (seitlich, Fächer) — breiter auseinandergezogen
   const Ry = Wc * 0.11         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
   const cardW = Wc * 0.32
   const cardH = Wc * 0.46
