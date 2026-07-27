@@ -108,32 +108,19 @@ export default function ScrollScene() {
     }
 
     // IntersectionObserver nicht nötig -> raus
+
+    // Desktop + Mobile: scroll-gesteuert. Die Sektion ist auf Desktop 600vh,
+    // auf Mobile 300vh (CSS) -> 141 Frames laufen beim Runterscrollen exakt
+    // EINMAL durch und stoppen am Ende (kein autoplay-loop, kein Wiederholen).
     window.addEventListener('scroll', onScroll, { passive: true })
-
-    let raf = null
-    let loopStart = 0
-    const MOBILE_FPS = 24
-    const loop = (t) => {
-      if (!loopStart) loopStart = t
-      const f = ((t - loopStart) / 1000 * MOBILE_FPS) | 0
-      drawFrame(f % FRAMES)
-      raf = requestAnimationFrame(loop)
-    }
-
-    if (!isMobile) {
-      window.addEventListener('scroll', onScroll, { passive: true })
-      window.addEventListener('resize', resize)
-      const init = setInterval(() => {
-        if (loadedRef.current) { drawFrame(0); updateActive(); onScroll(); clearInterval(init) }
-      }, 60)
-    } else {
-      raf = requestAnimationFrame(loop)
-    }
+    window.addEventListener('resize', resize)
+    const init = setInterval(() => {
+      if (loadedRef.current) { drawFrame(0); updateActive(); onScroll(); clearInterval(init) }
+    }, 60)
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', resize)
-      if (raf) cancelAnimationFrame(raf)
     }
   }, [])
 

@@ -229,7 +229,7 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
    Canvas ist FIXED (nicht sticky -> kein overflow-x-Bug), z-index:1 ueber Hero-BG(z:0),
    unter Header(z:50). IntersectionObserver schaltet .is-active nur bei sichtbarer #story. */
 .story-section { position: relative; width: 100%; min-height: 600vh; z-index: 1; pointer-events: none; }
-.story-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block;
+.story-canvas { position: fixed; inset: 0; width: 100vw; height: 100dvh; display: block;
   z-index: 1; opacity: 0; pointer-events: none;
   transition: opacity .85s ease, filter .85s ease, transform .85s ease;
   /* gleicher "hintergründiger" Look wie .hero-img: weich, gedimmt, saturiert, leicht gezoomt */
@@ -488,3 +488,12 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
 .deck-loading, .deck-nf { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   z-index: 201; background: rgba(20,12,40,.95); border: 1px solid rgba(124,58,237,.5);
   border-radius: 12px; padding: 10px 18px; color: #fff; font-size: 14px; }
+
+/* ============ MOBILE (<=768px) ============
+   #story läuft auf Mobile als autoplay-Loop (kein scrub). Die 600vh Scroll-
+   Fläche würde sonst 6 leere Screens erzwingen -> wirkt wie "hängt".
+   Auf 100vh kürzen: Loop läuft 1 Screen, danach sauber weiterscrollen. */
+@media (max-width: 768px) {
+  .story-section { min-height: 300vh; }
+  .story-canvas { height: 100dvh; }
+}
