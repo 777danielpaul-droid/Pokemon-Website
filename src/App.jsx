@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useSpring, animate, useTransform } from 'framer-motion'
 import { cards } from './data.js'
 import Starfield from './Starfield.jsx'
+import ScrollScene from './ScrollScene.jsx'
 
 const DEG = Math.PI / 180
 
@@ -205,6 +206,9 @@ export default function App() {
           </div>
         </div>
         </div>{/* /.stage-inner */}
+
+        {/* ---------- Scroll-getriebene Anim-Szene (frame-to-frame Hintergrund) ---------- */}
+        <ScrollScene />
 
         {/* TODO: temporärer Spacer zum Testen des Header-Auto-Hide — später durch echte untere Elemente ersetzen */}
         <div className="scroll-spacer" aria-hidden="true" />
