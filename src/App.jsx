@@ -32,6 +32,20 @@ export default function App() {
   const { w: W } = useSize(wrapRef)
   const [active, setActive] = useState(0)
   const [hovered, setHovered] = useState(null)
+  const [headerHidden, setHeaderHidden] = useState(false)
+
+  // Auto-Hide-Header: runter scrollen -> einrollen, hoch scrollen -> ausrollen
+  useEffect(() => {
+    let last = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      if (y > last && y > 80) setHeaderHidden(true)
+      else if (y < last) setHeaderHidden(false)
+      last = y
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const step = 360 / n
   const target = useRef(0)
@@ -97,8 +111,8 @@ export default function App() {
       <div className="holo-grain" aria-hidden="true" />
       <Starfield />
 
-      {/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite, sticky) ---------- */}
-      <header className="glass-header">
+      {/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite, sticky, auto-hide) ---------- */}
+      <header className={`glass-header${headerHidden ? ' is-hidden' : ''}`}>
         <div className="gh-glow" aria-hidden="true" />
         <a className="gh-brand" href="https://www.pokemon.com/de" target="_blank" rel="noreferrer">
           <span className="gh-dot" />Pokémon<span className="gh-brand-dim">.de</span>
@@ -112,6 +126,13 @@ export default function App() {
           <a href="https://www.pokemon.com/de/spiele" target="_blank" rel="noreferrer">Spiele</a>
         </nav>
       </header>
+      {/* schmale Klick-Leiste: bleibt stehen wenn Header eingefahren, rollt ihn aus */}
+      <button
+        className={`header-edge${headerHidden ? ' is-visible' : ''}`}
+        aria-label="Header einblenden"
+        onClick={() => setHeaderHidden(false)}
+        tabIndex={headerHidden ? 0 : -1}
+      />
 
       <main className="stage">
         <div className="hero-head">

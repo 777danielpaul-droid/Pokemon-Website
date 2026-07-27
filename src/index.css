@@ -85,7 +85,15 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   background: linear-gradient(120deg, rgba(120,160,210,.20), rgba(120,160,210,.09) 40%, rgba(20,30,44,.22));
   border: none; border-bottom: 2px solid #7FD4E8;
   box-shadow: 0 0 26px rgba(127,212,232,.55), 0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
-  overflow: visible; isolation: isolate; }
+  overflow: visible; isolation: isolate;
+  transition: transform .35s cubic-bezier(.4,0,.2,1); will-change: transform; }
+.glass-header.is-hidden { transform: translateY(-110%); }
+.header-edge { position: fixed; top: 0; left: 0; right: 0; height: 9px; z-index: 60;
+  border: none; padding: 0; margin: 0; cursor: pointer; pointer-events: none;
+  background: linear-gradient(90deg, #7FD4E8, #c4b5fd 50%, #7FD4E8);
+  box-shadow: 0 0 16px rgba(127,212,232,.7); opacity: 0; transform: translateY(-100%);
+  transition: opacity .25s ease, transform .25s ease; }
+.header-edge.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .glass-header .gh-glow { position: absolute; inset: -60% 0 -90% 0; z-index: -1;
   background: radial-gradient(75% 110% at 22% 8%, rgba(224,247,255,.92), rgba(186,230,253,.70) 38%, transparent 70%);
   filter: blur(42px); pointer-events: none; transform-origin: 50% 0%;
