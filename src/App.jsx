@@ -264,6 +264,22 @@ export default function App() {
       {/* ---------- Pokedex (erscheint am Ende der Seite, nach der Animation) ---------- */}
       <Pokedex />
 
+      {/* ---------- Footer im Header-Stil (Blind-Anker) ---------- */}
+      <footer className="glass-footer">
+        <div className="gf-glow" aria-hidden="true" />
+        <nav className="gf-nav" aria-label="Footer">
+          <a href="#pokedex" className="gf-link">Pokédex</a>
+          <a href="#news" className="gf-link">News</a>
+          <a href="#tv" className="gf-link">TV</a>
+          <a href="#tcg" className="gf-link">Sammelkarten</a>
+          <a href="#go" className="gf-link">Pokémon GO</a>
+          <a href="#games" className="gf-link">Spiele</a>
+          <a href="#events" className="gf-link">Events</a>
+          <a href="#shop" className="gf-link">Shop</a>
+        </nav>
+        <div className="gf-brand"><span className="gf-dot" />Pokémon · Fan-Projekt</div>
+      </footer>
+
       {/* ---------- Booster Open Modal ---------- */}
       {boosterOpen && <BoosterModal onClose={() => setBoosterOpen(false)} />}
     </>
