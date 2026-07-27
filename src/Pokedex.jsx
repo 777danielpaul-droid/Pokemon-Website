@@ -30,6 +30,19 @@ export default function Pokedex() {
   const [randomBusy, setRandomBusy] = useState(false)
   const cacheRef = useRef(new Map())             // Name -> Detail (gecachet)
   const debounceRef = useRef(null)
+  const sectionRef = useRef(null)
+
+  // sanftes "Hochfahren": is-in sobald die Section ~55% sichtbar ist (kein sticky -> overflow-x-Bug)
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { el.classList.add('is-in'); io.disconnect() } },
+      { threshold: 0.55 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   // --- 1. Liste laden (1x) ---
   useEffect(() => {
@@ -132,7 +145,7 @@ export default function Pokedex() {
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE))
 
   return (
-    <section id="pokedex" className="pokedex-section" aria-label="Pokedex">
+    <section id="pokedex" ref={sectionRef} className="pokedex-section" aria-label="Pokedex">
       <div className="phone">
         <div className="phone-frame">
           <div className="phone-notch" aria-hidden="true"><span className="phone-cam" /></div>
