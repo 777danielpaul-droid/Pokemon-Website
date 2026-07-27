@@ -46,6 +46,14 @@ export default function App() {
   const [headerHidden, setHeaderHidden] = useState(false)
   const [boosterOpen, setBoosterOpen] = useState(false)
 
+  // Beim Laden/Reload IMMER zum Seitenanfang springen (Browser-Scroll-Restore aus)
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+    window.scrollTo(0, 0)
+  }, [])
+
   // Auto-Hide-Header: runter scrollen/wheel -> einrollen, hoch -> ausrollen
   useEffect(() => {
     let lastY = window.scrollY
