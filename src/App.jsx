@@ -34,17 +34,43 @@ export default function App() {
   const [hovered, setHovered] = useState(null)
   const [headerHidden, setHeaderHidden] = useState(false)
 
-  // Auto-Hide-Header: runter scrollen -> einrollen, hoch scrollen -> ausrollen
+  // Auto-Hide-Header: runter scrollen/wheel -> einrollen, hoch -> ausrollen
   useEffect(() => {
-    let last = window.scrollY
+    let lastY = window.scrollY
+    let wheelLock = false
+    const hide = () => setHeaderHidden(true)
+    const show = () => setHeaderHidden(false)
+    // scroll (echter Content-Overflow)
     const onScroll = () => {
       const y = window.scrollY
-      if (y > last && y > 80) setHeaderHidden(true)
-      else if (y < last) setHeaderHidden(false)
-      last = y
+      if (y > lastY && y > 80) hide()
+      else if (y < lastY) show()
+      lastY = y
+    }
+    // wheel/touch: funktioniert AUCH bei nicht-scrollbarer One-Pager-Seite
+    const onWheel = (e) => {
+      if (wheelLock) return
+      wheelLock = true
+      setTimeout(() => (wheelLock = false), 120)
+      if (e.deltaY > 4) hide()
+      else if (e.deltaY < -4) show()
+    }
+    const onTouch = (e) => {
+      const y = e.touches[0]?.clientY ?? lastY
+      if (y < lastY - 6) hide()
+      else if (y > lastY + 6) show()
+      lastY = y
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('wheel', onWheel, { passive: true })
+    window.addEventListener('touchstart', onTouch, { passive: true })
+    window.addEventListener('touchmove', onTouch, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('touchstart', onTouch)
+      window.removeEventListener('touchmove', onTouch)
+    }
   }, [])
 
   const step = 360 / n
@@ -132,7 +158,9 @@ export default function App() {
         aria-label="Header einblenden"
         onClick={() => setHeaderHidden(false)}
         tabIndex={headerHidden ? 0 : -1}
-      />
+      >
+        <span className="header-edge-nub" aria-hidden="true" />
+      </button>
 
       <main className="stage">
         <div className="hero-head">
@@ -167,6 +195,9 @@ export default function App() {
           <span className="hint">{active + 1} / {n} · {categoryOf(cards[active]?.title || '')}</span>
           <button className="ctl" onClick={() => nudge(1)} aria-label="Weiter">›</button>
         </div>
+
+        {/* TODO: temporärer Spacer zum Testen des Header-Auto-Hide — später durch echte untere Elemente ersetzen */}
+        <div className="scroll-spacer" aria-hidden="true" />
       </main>
     </>
   )

@@ -94,6 +94,11 @@ html, body { margin: 0; min-height: 100%; background: #07070d; color: #f4f1fb;
   box-shadow: 0 0 16px rgba(127,212,232,.7); opacity: 0; transform: translateY(-100%);
   transition: opacity .25s ease, transform .25s ease; }
 .header-edge.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.header-edge-nub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0abfc, #6d28d9 70%);
+  box-shadow: 0 0 10px rgba(168,85,247,.95); }
+.scroll-spacer { height: 200vh; pointer-events: none; }
 .glass-header .gh-glow { position: absolute; inset: -60% 0 -90% 0; z-index: -1;
   background: radial-gradient(75% 110% at 22% 8%, rgba(224,247,255,.92), rgba(186,230,253,.70) 38%, transparent 70%);
   filter: blur(42px); pointer-events: none; transform-origin: 50% 0%;
