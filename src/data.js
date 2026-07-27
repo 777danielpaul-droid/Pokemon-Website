@@ -2,7 +2,8 @@ export const cards = [
   {
     "href": "https://www.pokemon.com/de/features/champs-im-rampenlicht-yoshiyuki-yamaguchi-glaenzt-auf-internationaler-buehne",
     "title": "Der japanische Star des Pokémon-Sammelkartenspiels Yoshiyuki Yamaguchi tritt auf internationaler Bühne groß auf",
-    "img": "https://www.pokemon.com/static-assets/content-assets/cms2/img/attend-events/_tiles/champions-spotlight/2026/yoshiyuki-yamaguchi/champions-spotlight-169.png"
+    "img": "https://www.pokemon.com/static-assets/content-assets/cms2/img/attend-events/_tiles/champions-spotlight/2026/yoshiyuki-yamaguchi/champions-spotlight-169.png",
+    "objectPosition": "right center"
   },
   {
     "href": "https://www.pokemon.com/de/news/professor-willows-assistent-pikachu-feiert-professor-willows-geburtstag-in-pokemon-go",

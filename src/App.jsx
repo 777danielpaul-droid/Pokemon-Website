@@ -124,8 +124,8 @@ export default function App() {
   const Rx = Wc * 0.46         // horizontale Spreizung (seitlich, Fächer)
   const Ry = Wc * 0.11         // vertikaler Radius (flach -> hintere Karten rücken nach unten, verdeckt)
   const cardW = Wc * 0.32
-  const cardH = Wc * 0.38
-  const offY = -Ry * 0.28      // Ring leicht nach OBEN -> Front-Karte endet sicher über dem Footer-Hinweis
+  const cardH = Wc * 0.46
+  const offY = -Ry * 0.62      // Ring weit nach OBEN -> Front-Karte endet sicher über dem Footer-Hinweis
 
   return (
     <>
@@ -245,7 +245,8 @@ function CardItem({ card, index, step, rot, Rx, Ry, offY, cardW, cardH, hovered,
       onHoverEnd={() => setHovered((h) => (h === index ? null : h))}
       onClick={() => setHovered((h) => (h === index ? null : index))}
       draggable={false}>
-      <img className="img" src={card.img} alt={card.title} loading="lazy" draggable={false} />
+      <img className="img" src={card.img} alt={card.title} loading="lazy" draggable={false}
+        style={{ objectPosition: card.objectPosition || 'center' }} />
       <div className="scrim" />
       <div className="label"><span className="tag">{categoryOf(card.title)}</span><div>{card.title}</div></div>
     </motion.a>
