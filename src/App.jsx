@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useSpring, animate, useTransform } from 'framer-motion'
 import { cards } from './data.js'
+import Starfield from './Starfield.jsx'
 
 const DEG = Math.PI / 180
 
@@ -93,9 +94,8 @@ export default function App() {
         <span className="blob b4" /><span className="blob b5" /><span className="blob b6" /><span className="blob b7" />
       </div>
       <div className="holo-sheen" aria-hidden="true" />
-      <div className="holo-glitter" aria-hidden="true" />
-      <div className="holo-glitter2" aria-hidden="true" />
       <div className="holo-grain" aria-hidden="true" />
+      <Starfield />
 
       {/* ---------- FROSTED-GLASS HEADER (oben, eckig, volle Breite, sticky) ---------- */}
       <header className="glass-header">
